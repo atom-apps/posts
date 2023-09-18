@@ -9,6 +9,6 @@ DB = 0
 [MySQL]
 Username = "root"
 Password = "admin"
-Database = "atom_storage"
+Database = "atom_post"
 Host = "localhost"
 Port = 3306
