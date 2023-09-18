@@ -7,14 +7,18 @@ require (
 	github.com/atom-providers/database-mysql v0.0.0-20230801062833-f884a0ac6f21
 	github.com/atom-providers/faker v0.0.0-20230801062847-1ecbe384fc34
 	github.com/atom-providers/jwt v0.0.0-20230906104831-c1185cd2831a
+	github.com/atom-providers/log v0.0.0-20230805054420-343ad809890e
 	github.com/atom-providers/service-http v0.0.0-20230811021646-9685461114d2
 	github.com/atom-providers/uuid v0.0.0-20230801062951-5331ee1b8af6
 	github.com/go-gormigrate/gormigrate/v2 v2.1.1
 	github.com/gofiber/fiber/v2 v2.49.2
+	github.com/jinzhu/copier v0.4.0
 	github.com/rogeecn/atom v1.0.8
 	github.com/rogeecn/fen v1.0.9
+	github.com/samber/lo v1.38.1
 	gorm.io/gen v0.3.23
 	gorm.io/gorm v1.25.4
+	gorm.io/plugin/dbresolver v1.3.0
 )
 
 require (
@@ -22,7 +26,6 @@ require (
 	github.com/atom-providers/app v0.0.0-20230811021217-98a085634a0a // indirect
 	github.com/atom-providers/config v0.0.0-20230801062037-db91396e3287 // indirect
 	github.com/atom-providers/http-fiber v0.0.0-20230801062902-dd7466ac87eb // indirect
-	github.com/atom-providers/log v0.0.0-20230805054420-343ad809890e // indirect
 	github.com/brianvoe/gofakeit/v6 v6.23.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
@@ -46,7 +49,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
-	github.com/samber/lo v1.38.1 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
@@ -72,5 +74,4 @@ require (
 	gorm.io/datatypes v1.1.1-0.20230130040222-c43177d3cf8c // indirect
 	gorm.io/driver/mysql v1.5.1 // indirect
 	gorm.io/hints v1.1.0 // indirect
-	gorm.io/plugin/dbresolver v1.3.0 // indirect
 )

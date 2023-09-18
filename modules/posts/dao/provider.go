@@ -1,0 +1,77 @@
+package dao
+
+import (
+	"github.com/atom-apps/posts/database/query"
+	"github.com/rogeecn/atom/container"
+	"github.com/rogeecn/atom/utils/opt"
+)
+
+func Provide(opts ...opt.Option) error {
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ArticleAttachmentDao, error) {
+		obj := &ArticleAttachmentDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ArticleContentDao, error) {
+		obj := &ArticleContentDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ArticleDigDao, error) {
+		obj := &ArticleDigDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ArticleDao, error) {
+		obj := &ArticleDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*BookDao, error) {
+		obj := &BookDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ChapterDao, error) {
+		obj := &ChapterDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	return nil
+}
