@@ -9,9 +9,9 @@ func (m *Migration20230918_151749CreateArticleDig) table() interface{} {
 	type ArticleDig struct {
 		ModelOnlyID
 		ModelWithArticle
-		Views    uint64 `gorm:"comment:浏览量"`
-		Likes    uint64 `gorm:"comment:喜欢"`
-		Dislikes uint64 `gorm:"comment:不喜欢"`
+		Views    uint `gorm:"comment:浏览量"`
+		Likes    uint `gorm:"comment:喜欢"`
+		Dislikes uint `gorm:"comment:不喜欢"`
 	}
 
 	return &ArticleDig{}

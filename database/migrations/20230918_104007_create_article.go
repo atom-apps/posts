@@ -14,9 +14,9 @@ func (m *Migration20230918_104007CreateArticle) table() interface{} {
 		Model
 		ModelWithUser
 		UUID        string                   `gorm:"index:idx_uuid;size:64;not null;comment:UUID"`
-		BookID      uint64                   `gorm:"index;comment:书ID"`
-		ChapterID   uint64                   `gorm:"index;comment:章节ID"`
-		CategoryID  uint64                   `gorm:"index;comment:分类"`
+		BookID      uint                     `gorm:"index;comment:书ID"`
+		ChapterID   uint                     `gorm:"index;comment:章节ID"`
+		CategoryID  uint                     `gorm:"index;comment:分类"`
 		PublishAt   time.Time                `gorm:"comment:发布时间"`                // 未到达发布时间不发布
 		Type        consts.ArticleType       `gorm:"index:idx_type;comment:文章类型"` // 文字，图片，视频，音频
 		Format      consts.ArticleFormat     `gorm:"comment:文章格式"`                // html, markdown
@@ -27,7 +27,7 @@ func (m *Migration20230918_104007CreateArticle) table() interface{} {
 		Videos      common.ArticleVideos     `gorm:"type:text;not null;comment:视频"`
 		Audios      common.ArticleAudios     `gorm:"type:text;not null;comment:音频"`
 		PostIP      string                   `gorm:"size:128;comment:发布IP"`
-		Weight      uint64                   `gorm:"comment:权重"` // 0 - uint64.max 最低 - 最高
+		Weight      uint                     `gorm:"comment:权重"` // 0 - uint.max 最低 - 最高
 	}
 
 	return &Article{}

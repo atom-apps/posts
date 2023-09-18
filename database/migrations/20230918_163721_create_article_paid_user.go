@@ -13,8 +13,8 @@ func (m *Migration20230918_163721CreateArticlePaidUser) table() interface{} {
 		ModelWithArticle
 
 		PriceType consts.ArticlePriceType `gorm:"comment:付费类型"`
-		Price     uint64                  `gorm:"comment:付费价格"`
-		EndAt     uint64                  `gorm:"comment:付费结束时间"`
+		Price     uint                    `gorm:"comment:付费价格"`
+		EndAt     uint                    `gorm:"comment:付费结束时间"`
 	}
 
 	return &ArticlePaidUser{}
