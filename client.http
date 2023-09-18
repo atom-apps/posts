@@ -1,0 +1,4 @@
+###
+# 获取前端路由列表
+GET {{host}}/posts/articles
+Authorization: {{token}}
