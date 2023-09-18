@@ -22,6 +22,7 @@ var (
 	ArticleContent       *articleContent
 	ArticleDig           *articleDig
 	ArticleForwardSource *articleForwardSource
+	ArticlePaidUser      *articlePaidUser
 	ArticlePayment       *articlePayment
 	Book                 *book
 	Chapter              *chapter
@@ -35,6 +36,7 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	ArticleContent = &Q.ArticleContent
 	ArticleDig = &Q.ArticleDig
 	ArticleForwardSource = &Q.ArticleForwardSource
+	ArticlePaidUser = &Q.ArticlePaidUser
 	ArticlePayment = &Q.ArticlePayment
 	Book = &Q.Book
 	Chapter = &Q.Chapter
@@ -49,6 +51,7 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		ArticleContent:       newArticleContent(db, opts...),
 		ArticleDig:           newArticleDig(db, opts...),
 		ArticleForwardSource: newArticleForwardSource(db, opts...),
+		ArticlePaidUser:      newArticlePaidUser(db, opts...),
 		ArticlePayment:       newArticlePayment(db, opts...),
 		Book:                 newBook(db, opts...),
 		Chapter:              newChapter(db, opts...),
@@ -64,6 +67,7 @@ type Query struct {
 	ArticleContent       articleContent
 	ArticleDig           articleDig
 	ArticleForwardSource articleForwardSource
+	ArticlePaidUser      articlePaidUser
 	ArticlePayment       articlePayment
 	Book                 book
 	Chapter              chapter
@@ -80,6 +84,7 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		ArticleContent:       q.ArticleContent.clone(db),
 		ArticleDig:           q.ArticleDig.clone(db),
 		ArticleForwardSource: q.ArticleForwardSource.clone(db),
+		ArticlePaidUser:      q.ArticlePaidUser.clone(db),
 		ArticlePayment:       q.ArticlePayment.clone(db),
 		Book:                 q.Book.clone(db),
 		Chapter:              q.Chapter.clone(db),
@@ -103,6 +108,7 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		ArticleContent:       q.ArticleContent.replaceDB(db),
 		ArticleDig:           q.ArticleDig.replaceDB(db),
 		ArticleForwardSource: q.ArticleForwardSource.replaceDB(db),
+		ArticlePaidUser:      q.ArticlePaidUser.replaceDB(db),
 		ArticlePayment:       q.ArticlePayment.replaceDB(db),
 		Book:                 q.Book.replaceDB(db),
 		Chapter:              q.Chapter.replaceDB(db),
@@ -116,6 +122,7 @@ type queryCtx struct {
 	ArticleContent       IArticleContentDo
 	ArticleDig           IArticleDigDo
 	ArticleForwardSource IArticleForwardSourceDo
+	ArticlePaidUser      IArticlePaidUserDo
 	ArticlePayment       IArticlePaymentDo
 	Book                 IBookDo
 	Chapter              IChapterDo
@@ -129,6 +136,7 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		ArticleContent:       q.ArticleContent.WithContext(ctx),
 		ArticleDig:           q.ArticleDig.WithContext(ctx),
 		ArticleForwardSource: q.ArticleForwardSource.WithContext(ctx),
+		ArticlePaidUser:      q.ArticlePaidUser.WithContext(ctx),
 		ArticlePayment:       q.ArticlePayment.WithContext(ctx),
 		Book:                 q.Book.WithContext(ctx),
 		Chapter:              q.Chapter.WithContext(ctx),

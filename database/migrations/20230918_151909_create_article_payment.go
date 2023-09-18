@@ -14,6 +14,7 @@ func (m *Migration20230918_151909CreateArticlePayment) table() interface{} {
 		ModelWithArticle
 
 		PriceType       consts.ArticlePriceType `gorm:"comment:付费类型"`
+		Token           string                  `gorm:"size:12;comment:付费密码"`
 		Price           uint64                  `gorm:"comment:付费价格"`
 		Discount        uint64                  `gorm:"comment:付费折扣"`
 		DiscountStartAt time.Time               `gorm:"comment:折扣开始时间"`

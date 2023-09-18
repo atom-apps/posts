@@ -31,6 +31,7 @@ func newArticlePayment(db *gorm.DB, opts ...gen.DOOption) articlePayment {
 	_articlePayment.CreatedAt = field.NewTime(tableName, "created_at")
 	_articlePayment.ArticleID = field.NewUint64(tableName, "article_id")
 	_articlePayment.PriceType = field.NewInt64(tableName, "price_type")
+	_articlePayment.Token = field.NewString(tableName, "token")
 	_articlePayment.Price = field.NewUint64(tableName, "price")
 	_articlePayment.Discount = field.NewUint64(tableName, "discount")
 	_articlePayment.DiscountStartAt = field.NewTime(tableName, "discount_start_at")
@@ -49,6 +50,7 @@ type articlePayment struct {
 	CreatedAt       field.Time   // 创建时间
 	ArticleID       field.Uint64 // 文章ID
 	PriceType       field.Int64  // 付费类型
+	Token           field.String // 付费密码
 	Price           field.Uint64 // 付费价格
 	Discount        field.Uint64 // 付费折扣
 	DiscountStartAt field.Time   // 折扣开始时间
@@ -73,6 +75,7 @@ func (a *articlePayment) updateTableName(table string) *articlePayment {
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.ArticleID = field.NewUint64(table, "article_id")
 	a.PriceType = field.NewInt64(table, "price_type")
+	a.Token = field.NewString(table, "token")
 	a.Price = field.NewUint64(table, "price")
 	a.Discount = field.NewUint64(table, "discount")
 	a.DiscountStartAt = field.NewTime(table, "discount_start_at")
@@ -105,11 +108,12 @@ func (a *articlePayment) GetFieldByName(fieldName string) (field.OrderExpr, bool
 }
 
 func (a *articlePayment) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 8)
+	a.fieldMap = make(map[string]field.Expr, 9)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["created_at"] = a.CreatedAt
 	a.fieldMap["article_id"] = a.ArticleID
 	a.fieldMap["price_type"] = a.PriceType
+	a.fieldMap["token"] = a.Token
 	a.fieldMap["price"] = a.Price
 	a.fieldMap["discount"] = a.Discount
 	a.fieldMap["discount_start_at"] = a.DiscountStartAt

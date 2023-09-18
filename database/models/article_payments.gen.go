@@ -18,6 +18,7 @@ type ArticlePayment struct {
 	CreatedAt       time.Time `gorm:"column:created_at;type:datetime(3);comment:创建时间" json:"created_at"`                 // 创建时间
 	ArticleID       uint64    `gorm:"column:article_id;type:bigint unsigned;comment:文章ID" json:"article_id"`             // 文章ID
 	PriceType       int64     `gorm:"column:price_type;type:bigint;comment:付费类型" json:"price_type"`                      // 付费类型
+	Token           string    `gorm:"column:token;type:varchar(12);comment:付费密码" json:"token"`                           // 付费密码
 	Price           uint64    `gorm:"column:price;type:bigint unsigned;comment:付费价格" json:"price"`                       // 付费价格
 	Discount        uint64    `gorm:"column:discount;type:bigint unsigned;comment:付费折扣" json:"discount"`                 // 付费折扣
 	DiscountStartAt time.Time `gorm:"column:discount_start_at;type:datetime(3);comment:折扣开始时间" json:"discount_start_at"` // 折扣开始时间
