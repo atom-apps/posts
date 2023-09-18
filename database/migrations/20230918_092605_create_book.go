@@ -8,6 +8,14 @@ import (
 func (m *Migration20230918_092605CreateBook) table() interface{} {
 	type Book struct {
 		Model
+		ModelWithUser
+		Title       string `gorm:"size:128;not null;default:'';comment:书名"`
+		Description string `gorm:"size:256;not null;default:'';comment:简介"`
+		Content     string `gorm:"comment:详细介绍"`
+		Author      string `gorm:"size:128;comment:原作者"`
+		Source      string `gorm:"size:1024;comment:原书地址"`
+		ISBN        string `gorm:"size:64;comment:ISBN"`
+		Price       uint64 `gorm:"comment:价格"`
 	}
 
 	return &Book{}
