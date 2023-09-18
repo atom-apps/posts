@@ -8,6 +8,7 @@ import (
 
 	"github.com/atom-apps/posts/database/query"
 	"github.com/atom-apps/posts/modules/boot"
+	modulePosts "github.com/atom-apps/posts/modules/posts"
 	database "github.com/atom-providers/database-mysql"
 	"github.com/atom-providers/jwt"
 	serviceHttp "github.com/atom-providers/service-http"
@@ -23,6 +24,7 @@ func main() {
 		database.DefaultProvider(),
 	).With(
 		boot.Providers(),
+		modulePosts.Providers(),
 	)
 	// providers := serviceGrpc.Default()
 
