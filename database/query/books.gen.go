@@ -34,6 +34,7 @@ func newBook(db *gorm.DB, opts ...gen.DOOption) book {
 	_book.TenantID = field.NewUint64(tableName, "tenant_id")
 	_book.UserID = field.NewUint64(tableName, "user_id")
 	_book.Title = field.NewString(tableName, "title")
+	_book.ThumbnailFileID = field.NewUint64(tableName, "thumbnail_file_id")
 	_book.Description = field.NewString(tableName, "description")
 	_book.Content = field.NewString(tableName, "content")
 	_book.Author = field.NewString(tableName, "author")
@@ -49,20 +50,21 @@ func newBook(db *gorm.DB, opts ...gen.DOOption) book {
 type book struct {
 	bookDo bookDo
 
-	ALL         field.Asterisk
-	ID          field.Uint64 // ID
-	CreatedAt   field.Time   // 创建时间
-	UpdatedAt   field.Time   // 更新时间
-	DeletedAt   field.Field  // 删除时间
-	TenantID    field.Uint64 // 租户ID
-	UserID      field.Uint64 // 用户ID
-	Title       field.String // 书名
-	Description field.String // 简介
-	Content     field.String // 详细介绍
-	Author      field.String // 原作者
-	Source      field.String // 原书地址
-	Isbn        field.String // ISBN
-	Price       field.Uint64 // 价格
+	ALL             field.Asterisk
+	ID              field.Uint64 // ID
+	CreatedAt       field.Time   // 创建时间
+	UpdatedAt       field.Time   // 更新时间
+	DeletedAt       field.Field  // 删除时间
+	TenantID        field.Uint64 // 租户ID
+	UserID          field.Uint64 // 用户ID
+	Title           field.String // 书名
+	ThumbnailFileID field.Uint64 // 封面
+	Description     field.String // 简介
+	Content         field.String // 详细介绍
+	Author          field.String // 原作者
+	Source          field.String // 原书地址
+	Isbn            field.String // ISBN
+	Price           field.Uint64 // 价格
 
 	fieldMap map[string]field.Expr
 }
@@ -86,6 +88,7 @@ func (b *book) updateTableName(table string) *book {
 	b.TenantID = field.NewUint64(table, "tenant_id")
 	b.UserID = field.NewUint64(table, "user_id")
 	b.Title = field.NewString(table, "title")
+	b.ThumbnailFileID = field.NewUint64(table, "thumbnail_file_id")
 	b.Description = field.NewString(table, "description")
 	b.Content = field.NewString(table, "content")
 	b.Author = field.NewString(table, "author")
@@ -116,7 +119,7 @@ func (b *book) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (b *book) fillFieldMap() {
-	b.fieldMap = make(map[string]field.Expr, 13)
+	b.fieldMap = make(map[string]field.Expr, 14)
 	b.fieldMap["id"] = b.ID
 	b.fieldMap["created_at"] = b.CreatedAt
 	b.fieldMap["updated_at"] = b.UpdatedAt
@@ -124,6 +127,7 @@ func (b *book) fillFieldMap() {
 	b.fieldMap["tenant_id"] = b.TenantID
 	b.fieldMap["user_id"] = b.UserID
 	b.fieldMap["title"] = b.Title
+	b.fieldMap["thumbnail_file_id"] = b.ThumbnailFileID
 	b.fieldMap["description"] = b.Description
 	b.fieldMap["content"] = b.Content
 	b.fieldMap["author"] = b.Author
