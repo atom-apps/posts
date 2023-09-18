@@ -36,6 +36,7 @@ func newArticle(db *gorm.DB, opts ...gen.DOOption) article {
 	_article.UUID = field.NewString(tableName, "uuid")
 	_article.BookID = field.NewUint64(tableName, "book_id")
 	_article.ChapterID = field.NewUint64(tableName, "chapter_id")
+	_article.CategoryID = field.NewUint64(tableName, "category_id")
 	_article.PublishAt = field.NewTime(tableName, "publish_at")
 	_article.Type = field.NewInt64(tableName, "type")
 	_article.Format = field.NewInt64(tableName, "format")
@@ -46,6 +47,7 @@ func newArticle(db *gorm.DB, opts ...gen.DOOption) article {
 	_article.Videos = field.NewString(tableName, "videos")
 	_article.Audios = field.NewString(tableName, "audios")
 	_article.PostIP = field.NewString(tableName, "post_ip")
+	_article.Weight = field.NewUint64(tableName, "weight")
 
 	_article.fillFieldMap()
 
@@ -65,6 +67,7 @@ type article struct {
 	UUID        field.String // UUID
 	BookID      field.Uint64 // 书ID
 	ChapterID   field.Uint64 // 章节ID
+	CategoryID  field.Uint64 // 分类
 	PublishAt   field.Time   // 发布时间
 	Type        field.Int64  // 文章类型
 	Format      field.Int64  // 文章格式
@@ -75,6 +78,7 @@ type article struct {
 	Videos      field.String // 视频
 	Audios      field.String // 音频
 	PostIP      field.String // 发布IP
+	Weight      field.Uint64 // 权重
 
 	fieldMap map[string]field.Expr
 }
@@ -100,6 +104,7 @@ func (a *article) updateTableName(table string) *article {
 	a.UUID = field.NewString(table, "uuid")
 	a.BookID = field.NewUint64(table, "book_id")
 	a.ChapterID = field.NewUint64(table, "chapter_id")
+	a.CategoryID = field.NewUint64(table, "category_id")
 	a.PublishAt = field.NewTime(table, "publish_at")
 	a.Type = field.NewInt64(table, "type")
 	a.Format = field.NewInt64(table, "format")
@@ -110,6 +115,7 @@ func (a *article) updateTableName(table string) *article {
 	a.Videos = field.NewString(table, "videos")
 	a.Audios = field.NewString(table, "audios")
 	a.PostIP = field.NewString(table, "post_ip")
+	a.Weight = field.NewUint64(table, "weight")
 
 	a.fillFieldMap()
 
@@ -134,7 +140,7 @@ func (a *article) GetFieldByName(fieldName string) (field.OrderExpr, bool) {
 }
 
 func (a *article) fillFieldMap() {
-	a.fieldMap = make(map[string]field.Expr, 19)
+	a.fieldMap = make(map[string]field.Expr, 21)
 	a.fieldMap["id"] = a.ID
 	a.fieldMap["created_at"] = a.CreatedAt
 	a.fieldMap["updated_at"] = a.UpdatedAt
@@ -144,6 +150,7 @@ func (a *article) fillFieldMap() {
 	a.fieldMap["uuid"] = a.UUID
 	a.fieldMap["book_id"] = a.BookID
 	a.fieldMap["chapter_id"] = a.ChapterID
+	a.fieldMap["category_id"] = a.CategoryID
 	a.fieldMap["publish_at"] = a.PublishAt
 	a.fieldMap["type"] = a.Type
 	a.fieldMap["format"] = a.Format
@@ -154,6 +161,7 @@ func (a *article) fillFieldMap() {
 	a.fieldMap["videos"] = a.Videos
 	a.fieldMap["audios"] = a.Audios
 	a.fieldMap["post_ip"] = a.PostIP
+	a.fieldMap["weight"] = a.Weight
 }
 
 func (a article) clone(db *gorm.DB) article {

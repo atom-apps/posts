@@ -24,6 +24,7 @@ type Article struct {
 	UUID        string         `gorm:"column:uuid;type:varchar(64);not null;comment:UUID" json:"uuid"`                         // UUID
 	BookID      uint64         `gorm:"column:book_id;type:bigint unsigned;comment:书ID" json:"book_id"`                         // 书ID
 	ChapterID   uint64         `gorm:"column:chapter_id;type:bigint unsigned;comment:章节ID" json:"chapter_id"`                  // 章节ID
+	CategoryID  uint64         `gorm:"column:category_id;type:bigint unsigned;comment:分类" json:"category_id"`                  // 分类
 	PublishAt   time.Time      `gorm:"column:publish_at;type:datetime(3);comment:发布时间" json:"publish_at"`                      // 发布时间
 	Type        int64          `gorm:"column:type;type:bigint;comment:文章类型" json:"type"`                                       // 文章类型
 	Format      int64          `gorm:"column:format;type:bigint;comment:文章格式" json:"format"`                                   // 文章格式
@@ -33,7 +34,8 @@ type Article struct {
 	Thumbnails  string         `gorm:"column:thumbnails;type:text;not null;comment:缩略图" json:"thumbnails"`                     // 缩略图
 	Videos      string         `gorm:"column:videos;type:text;not null;comment:视频" json:"videos"`                              // 视频
 	Audios      string         `gorm:"column:audios;type:text;not null;comment:音频" json:"audios"`                              // 音频
-	PostIP      string         `gorm:"column:post_ip;type:varchar(191);comment:发布IP" json:"post_ip"`                           // 发布IP
+	PostIP      string         `gorm:"column:post_ip;type:varchar(128);comment:发布IP" json:"post_ip"`                           // 发布IP
+	Weight      uint64         `gorm:"column:weight;type:bigint unsigned;comment:权重" json:"weight"`                            // 权重
 }
 
 func (*Article) TableName(namer schema.Namer) string {

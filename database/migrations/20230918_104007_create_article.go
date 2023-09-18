@@ -16,6 +16,7 @@ func (m *Migration20230918_104007CreateArticle) table() interface{} {
 		UUID        string                   `gorm:"index:idx_uuid;size:64;not null;comment:UUID"`
 		BookID      uint64                   `gorm:"index;comment:书ID"`
 		ChapterID   uint64                   `gorm:"index;comment:章节ID"`
+		CategoryID  uint64                   `gorm:"index;comment:分类"`
 		PublishAt   time.Time                `gorm:"comment:发布时间"`                // 未到达发布时间不发布
 		Type        consts.ArticleType       `gorm:"index:idx_type;comment:文章类型"` // 文字，图片，视频，音频
 		Format      consts.ArticleFormat     `gorm:"comment:文章格式"`                // html, markdown
