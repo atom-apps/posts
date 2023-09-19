@@ -49,7 +49,7 @@ func (c *BookController) List(
 	pageFilter *common.PageQueryFilter,
 	sortFilter *common.SortQueryFilter,
 ) (*common.PageDataResponse, error) {
-	items, total, err := c.bookSvc.PageByQueryFilter(ctx.Context(), queryFilter, pageFilter, sortFilter)
+	items, total, err := c.bookSvc.PageByQueryFilter(ctx.Context(), queryFilter, pageFilter, sortFilter.DescID())
 	if err != nil {
 		return nil, err
 	}

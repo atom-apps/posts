@@ -7,21 +7,21 @@ package consts
 // Audio = 2,
 // Video = 3,
 // )
-type ArticleType int
+type ArticleType int64
 
 // swagger:enum ArticleFormat
 // ENUM(
 // Html = 0,
 // Markdown = 1,
 // )
-type ArticleFormat int
+type ArticleFormat int64
 
 // swagger:enum PriceType
 // ENUM(
 // Content = 0,
 // Attachment = 1,
 // )
-type ArticlePriceType int
+type ArticlePriceType int64
 
 // swagger:enum VideoProvider
 // ENUM(url, bilibili, tencent, youku, youtube, iqiyi, sohu, xigua, douyin, weishi, weibo)

@@ -28,8 +28,8 @@ type Article struct {
 	ChapterID   uint64                   `gorm:"column:chapter_id;type:bigint unsigned;comment:章节ID" json:"chapter_id"`                  // 章节ID
 	CategoryID  uint64                   `gorm:"column:category_id;type:bigint unsigned;comment:分类" json:"category_id"`                  // 分类
 	PublishAt   time.Time                `gorm:"column:publish_at;type:datetime(3);comment:发布时间" json:"publish_at"`                      // 发布时间
-	Type        consts.ArticleType       `gorm:"column:type;type:bigint;comment:文章类型" json:"type"`                                       // 文章类型
-	Format      consts.ArticleFormat     `gorm:"column:format;type:bigint;comment:文章格式" json:"format"`                                   // 文章格式
+	Type        consts.ArticleType       `gorm:"column:type;type:int;not null;comment:文章类型" json:"type"`                                 // 文章类型
+	Format      consts.ArticleFormat     `gorm:"column:format;type:int;not null;comment:文章格式" json:"format"`                             // 文章格式
 	Title       string                   `gorm:"column:title;type:varchar(128);not null;comment:标题" json:"title"`                        // 标题
 	Keyword     string                   `gorm:"column:keyword;type:varchar(256);not null;comment:关键词" json:"keyword"`                   // 关键词
 	Description string                   `gorm:"column:description;type:varchar(256);not null;comment:简介" json:"description"`            // 简介

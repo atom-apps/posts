@@ -52,10 +52,14 @@ func Provide(opts ...opt.Option) error {
 	}
 
 	if err := container.Container.Provide(func(
+		articleDao *dao.ArticleDao,
 		bookDao *dao.BookDao,
+		chapterDao *dao.ChapterDao,
 	) (*BookService, error) {
 		obj := &BookService{
-			bookDao: bookDao,
+			articleDao: articleDao,
+			bookDao:    bookDao,
+			chapterDao: chapterDao,
 		}
 		return obj, nil
 	}); err != nil {

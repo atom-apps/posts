@@ -24,7 +24,7 @@ type ChapterController struct {
 //	@Param			id	path		int	true	"ChapterID"
 //	@Success		200	{object}	dto.ChapterItem
 //	@Router			/v1/posts/books/{book_id}/chapters/{id} [get]
-func (c *ChapterController) Show(ctx *fiber.Ctx, bookId int, id uint64) (*dto.ChapterItem, error) {
+func (c *ChapterController) Show(ctx *fiber.Ctx, bookId, id uint64) (*dto.ChapterItem, error) {
 	item, err := c.chapterSvc.GetByID(ctx.Context(), id)
 	if err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ func (c *ChapterController) Show(ctx *fiber.Ctx, bookId int, id uint64) (*dto.Ch
 //	@Router			/v1/posts/books/{book_id}/chapters [get]
 func (c *ChapterController) List(
 	ctx *fiber.Ctx,
-	bookId int,
+	bookId uint64,
 	queryFilter *dto.ChapterListQueryFilter,
 	pageFilter *common.PageQueryFilter,
 	sortFilter *common.SortQueryFilter,

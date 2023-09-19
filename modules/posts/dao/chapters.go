@@ -86,6 +86,11 @@ func (dao *ChapterDao) Delete(ctx context.Context, id uint64) error {
 	return err
 }
 
+func (dao *ChapterDao) DeleteByBookID(ctx context.Context, bookID uint64) error {
+	_, err := dao.Context(ctx).Where(dao.query.Chapter.BookID.Eq(bookID)).Delete()
+	return err
+}
+
 func (dao *ChapterDao) DeletePermanently(ctx context.Context, id uint64) error {
 	_, err := dao.Context(ctx).Unscoped().Where(dao.query.Chapter.ID.Eq(id)).Delete()
 	return err
@@ -143,4 +148,9 @@ func (dao *ChapterDao) FirstByQueryFilter(
 	chapterQuery = dao.decorateQueryFilter(chapterQuery, queryFilter)
 	chapterQuery = dao.decorateSortQueryFilter(chapterQuery, sortFilter)
 	return chapterQuery.First()
+}
+
+// CountByBookID
+func (dao *ChapterDao) CountByBookID(ctx context.Context, bookID uint64) (int64, error) {
+	return dao.Context(ctx).Where(dao.query.Chapter.BookID.Eq(bookID)).Count()
 }

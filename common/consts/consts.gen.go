@@ -166,7 +166,7 @@ func (x *ArticleFormat) Scan(value interface{}) (err error) {
 
 // Value implements the driver Valuer interface.
 func (x ArticleFormat) Value() (driver.Value, error) {
-	return int(x), nil
+	return int64(x), nil
 }
 
 // Set implements the Golang flag.Value interface func.
@@ -386,7 +386,7 @@ func (x *ArticlePriceType) Scan(value interface{}) (err error) {
 
 // Value implements the driver Valuer interface.
 func (x ArticlePriceType) Value() (driver.Value, error) {
-	return int(x), nil
+	return int64(x), nil
 }
 
 // Set implements the Golang flag.Value interface func.
@@ -618,7 +618,7 @@ func (x *ArticleType) Scan(value interface{}) (err error) {
 
 // Value implements the driver Valuer interface.
 func (x ArticleType) Value() (driver.Value, error) {
-	return int(x), nil
+	return int64(x), nil
 }
 
 // Set implements the Golang flag.Value interface func.

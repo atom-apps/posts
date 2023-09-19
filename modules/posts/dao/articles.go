@@ -110,6 +110,11 @@ func (dao *ArticleDao) Delete(ctx context.Context, id uint64) error {
 	return err
 }
 
+func (dao *ArticleDao) DeleteByBookID(ctx context.Context, bookID uint64) error {
+	_, err := dao.Context(ctx).Where(dao.query.Article.BookID.Eq(bookID)).Delete()
+	return err
+}
+
 func (dao *ArticleDao) DeletePermanently(ctx context.Context, id uint64) error {
 	_, err := dao.Context(ctx).Unscoped().Where(dao.query.Article.ID.Eq(id)).Delete()
 	return err
@@ -167,4 +172,9 @@ func (dao *ArticleDao) FirstByQueryFilter(
 	articleQuery = dao.decorateQueryFilter(articleQuery, queryFilter)
 	articleQuery = dao.decorateSortQueryFilter(articleQuery, sortFilter)
 	return articleQuery.First()
+}
+
+// CountByBookID
+func (dao *ArticleDao) CountByBookID(ctx context.Context, bookID uint64) (int64, error) {
+	return dao.Context(ctx).Where(dao.query.Article.BookID.Eq(bookID)).Count()
 }

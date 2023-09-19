@@ -45,11 +45,12 @@ func (svc *ChapterService) FindByQueryFilter(
 
 func (svc *ChapterService) PageByQueryFilter(
 	ctx context.Context,
-	bookId int,
+	bookId uint64,
 	queryFilter *dto.ChapterListQueryFilter,
 	pageFilter *common.PageQueryFilter,
 	sortFilter *common.SortQueryFilter,
 ) ([]*models.Chapter, int64, error) {
+	queryFilter.BookID = &bookId
 	return svc.chapterDao.PageByQueryFilter(ctx, queryFilter, pageFilter.Format(), sortFilter)
 }
 

@@ -13,24 +13,37 @@ import (
 
 // @provider
 type BookService struct {
-	bookDao *dao.BookDao
+	bookDao    *dao.BookDao
+	chapterDao *dao.ChapterDao
+	articleDao *dao.ArticleDao
 }
 
 func (svc *BookService) DecorateItem(model *models.Book, id int) *dto.BookItem {
-	return &dto.BookItem{
-		ID:          model.ID,
-		CreatedAt:   model.CreatedAt,
-		UpdatedAt:   model.UpdatedAt,
-		TenantID:    model.TenantID,
-		UserID:      model.UserID,
-		Title:       model.Title,
-		Description: model.Description,
-		Content:     model.Content,
-		Author:      model.Author,
-		Source:      model.Source,
-		Isbn:        model.Isbn,
-		Price:       model.Price,
+	item := &dto.BookItem{
+		ID:           model.ID,
+		CreatedAt:    model.CreatedAt,
+		UpdatedAt:    model.UpdatedAt,
+		TenantID:     model.TenantID,
+		UserID:       model.UserID,
+		Title:        model.Title,
+		Description:  model.Description,
+		Content:      model.Content,
+		Author:       model.Author,
+		Source:       model.Source,
+		Isbn:         model.Isbn,
+		Price:        model.Price,
+		ChapterCount: 0,
+		ArticleCount: 0,
 	}
+
+	if count, err := svc.chapterDao.CountByBookID(context.Background(), model.ID); err == nil {
+		item.ChapterCount = count
+	}
+
+	if count, err := svc.articleDao.CountByBookID(context.Background(), model.ID); err == nil {
+		item.ArticleCount = count
+	}
+	return item
 }
 
 func (svc *BookService) GetByID(ctx context.Context, id uint64) (*models.Book, error) {
@@ -85,5 +98,14 @@ func (svc *BookService) UpdateFromModel(ctx context.Context, model *models.Book)
 
 // Delete
 func (svc *BookService) Delete(ctx context.Context, id uint64) error {
-	return svc.bookDao.Delete(ctx, id)
+	return svc.bookDao.Transaction(func() error {
+		if err := svc.chapterDao.DeleteByBookID(ctx, id); err != nil {
+			return err
+		}
+		if err := svc.articleDao.DeleteByBookID(ctx, id); err != nil {
+			return err
+		}
+
+		return svc.bookDao.Delete(ctx, id)
+	})
 }

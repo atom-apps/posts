@@ -17,9 +17,9 @@ func (m *Migration20230918_104007CreateArticle) table() interface{} {
 		BookID      uint                     `gorm:"index;comment:书ID"`
 		ChapterID   uint                     `gorm:"index;comment:章节ID"`
 		CategoryID  uint                     `gorm:"index;comment:分类"`
-		PublishAt   time.Time                `gorm:"comment:发布时间"`                // 未到达发布时间不发布
-		Type        consts.ArticleType       `gorm:"index:idx_type;comment:文章类型"` // 文字，图片，视频，音频
-		Format      consts.ArticleFormat     `gorm:"comment:文章格式"`                // html, markdown
+		PublishAt   time.Time                `gorm:"comment:发布时间"`                                      // 未到达发布时间不发布
+		Type        consts.ArticleType       `gorm:"type:int(11);index:idx_type;not null;comment:文章类型"` // 文字，图片，视频，音频
+		Format      consts.ArticleFormat     `gorm:"type:int(11);not null;comment:文章格式"`                // html, markdown
 		Title       string                   `gorm:"index:idx_title;size:128;not null;default:'';comment:标题"`
 		Keyword     string                   `gorm:"size:256;not null;default:'';comment:关键词"`
 		Description string                   `gorm:"size:256;not null;default:'';comment:简介"`

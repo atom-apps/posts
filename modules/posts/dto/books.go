@@ -44,4 +44,6 @@ type BookItem struct {
 	Source          string    `json:"source,omitempty"`                                     // 原书地址
 	Isbn            string    `json:"isbn,omitempty"`                                       // ISBN
 	Price           uint64    `json:"price,omitempty"`                                      // 价格
+	ChapterCount    int64     `json:"chapter_count"`                                        // 章节数量
+	ArticleCount    int64     `json:"article_count"`                                        // 文章数量
 }

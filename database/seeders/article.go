@@ -26,13 +26,19 @@ func (s *ArticleSeeder) Run(faker *gofakeit.Faker, db *gorm.DB) {
 		data := s.Generate(faker, index, true)
 		return &data
 	})
-	db.CreateInBatches(&ms, 100)
+	// db.CreateInBatches(&ms, 100)
+	lo.ForEach(ms, func(item *models.Article, index int) {
+		db.Create(item)
+	})
 
 	ms = lo.Times(times, func(index int) *models.Article {
 		data := s.Generate(faker, index, false)
 		return &data
 	})
-	db.CreateInBatches(&ms, 100)
+	// db.CreateInBatches(&ms, 100)
+	lo.ForEach(ms, func(item *models.Article, index int) {
+		db.Create(item)
+	})
 }
 
 func (s *ArticleSeeder) Generate(faker *gofakeit.Faker, idx int, isBook bool) models.Article {
@@ -40,7 +46,6 @@ func (s *ArticleSeeder) Generate(faker *gofakeit.Faker, idx int, isBook bool) mo
 	if isBook {
 		bookID = faker.Number(1, 50)
 	}
-
 	chapterID := 0
 	if isBook {
 		chapterID = faker.Number(1, 200)
@@ -61,7 +66,8 @@ func (s *ArticleSeeder) Generate(faker *gofakeit.Faker, idx int, isBook bool) mo
 		Description: faker.StreetName(),
 		Thumbnails: common.ArticleThumbnails{
 			{Width: 100, Height: 100, Image: faker.ImageURL(100, 100), Head: false},
-			{Width: 100, Height: 100, Image: faker.ImageURL(100, 100), Head: true},
+			{Width: 100, Height: 100, Image: faker.ImageURL(100, 100), Head: false},
+			{Width: 100, Height: 100, Image: faker.ImageURL(100, 100), Head: false},
 		},
 		Videos: common.ArticleVideos{
 			{Provider: "", Url: ""},
