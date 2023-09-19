@@ -14,10 +14,11 @@ import (
 // @provider
 type ChapterService struct {
 	chapterDao *dao.ChapterDao
+	articleDao *dao.ArticleDao
 }
 
 func (svc *ChapterService) DecorateItem(model *models.Chapter, id int) *dto.ChapterItem {
-	return &dto.ChapterItem{
+	item := &dto.ChapterItem{
 		ID:          model.ID,
 		CreatedAt:   model.CreatedAt,
 		UpdatedAt:   model.UpdatedAt,
@@ -28,6 +29,10 @@ func (svc *ChapterService) DecorateItem(model *models.Chapter, id int) *dto.Chap
 		Description: model.Description,
 		Content:     model.Content,
 	}
+	if count, err := svc.articleDao.CountByChapterID(context.Background(), model.ID); err == nil {
+		item.ArticleCount = count
+	}
+	return item
 }
 
 func (svc *ChapterService) GetByID(ctx context.Context, id uint64) (*models.Chapter, error) {

@@ -23,13 +23,14 @@ type ChapterListQueryFilter struct {
 }
 
 type ChapterItem struct {
-	ID          uint64    `json:"id,omitempty"`          // ID
-	CreatedAt   time.Time `json:"created_at,omitempty"`  // 创建时间
-	UpdatedAt   time.Time `json:"updated_at,omitempty"`  // 更新时间
-	TenantID    uint64    `json:"tenant_id,omitempty"`   // 租户ID
-	UserID      uint64    `json:"user_id,omitempty"`     // 用户ID
-	BookID      uint64    `json:"book_id,omitempty"`     // 书ID
-	Title       string    `json:"title,omitempty"`       // 章节名
-	Description string    `json:"description,omitempty"` // 简介
-	Content     string    `json:"content,omitempty"`     // 详细介绍
+	ID           uint64    `json:"id,omitempty"`          // ID
+	CreatedAt    time.Time `json:"created_at,omitempty"`  // 创建时间
+	UpdatedAt    time.Time `json:"updated_at,omitempty"`  // 更新时间
+	TenantID     uint64    `json:"tenant_id,omitempty"`   // 租户ID
+	UserID       uint64    `json:"user_id,omitempty"`     // 用户ID
+	BookID       uint64    `json:"book_id,omitempty"`     // 书ID
+	Title        string    `json:"title,omitempty"`       // 章节名
+	Description  string    `json:"description,omitempty"` // 简介
+	Content      string    `json:"content,omitempty"`     // 详细介绍
+	ArticleCount int64     `json:"article_count"`         // 文章数量
 }

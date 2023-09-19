@@ -67,9 +67,11 @@ func Provide(opts ...opt.Option) error {
 	}
 
 	if err := container.Container.Provide(func(
+		articleDao *dao.ArticleDao,
 		chapterDao *dao.ChapterDao,
 	) (*ChapterService, error) {
 		obj := &ChapterService{
+			articleDao: articleDao,
 			chapterDao: chapterDao,
 		}
 		return obj, nil

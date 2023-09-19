@@ -178,3 +178,8 @@ func (dao *ArticleDao) FirstByQueryFilter(
 func (dao *ArticleDao) CountByBookID(ctx context.Context, bookID uint64) (int64, error) {
 	return dao.Context(ctx).Where(dao.query.Article.BookID.Eq(bookID)).Count()
 }
+
+// CountByChapterID
+func (dao *ArticleDao) CountByChapterID(ctx context.Context, chapterID uint64) (int64, error) {
+	return dao.Context(ctx).Where(dao.query.Article.ChapterID.Eq(chapterID)).Count()
+}

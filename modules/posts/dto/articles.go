@@ -56,7 +56,9 @@ type ArticleItem struct {
 	CategoryID  uint64                   `json:"category_id,omitempty"` // 分类
 	PublishAt   time.Time                `json:"publish_at,omitempty"`  // 发布时间
 	Type        consts.ArticleType       `json:"type,omitempty"`        // 文章类型
+	TypeCN      string                   `json:"type_cn,omitempty"`     // 文章类型
 	Format      consts.ArticleFormat     `json:"format,omitempty"`      // 文章格式
+	FormatCN    string                   `json:"format_cn,omitempty"`   // 文章格式
 	Title       string                   `json:"title,omitempty"`       // 标题
 	Keyword     string                   `json:"keyword,omitempty"`     // 关键词
 	Description string                   `json:"description,omitempty"` // 简介
