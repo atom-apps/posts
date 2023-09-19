@@ -24,7 +24,7 @@ type Book struct {
 	Title           string         `gorm:"column:title;type:varchar(128);not null;comment:书名" json:"title"`                        // 书名
 	ThumbnailFileID uint64         `gorm:"column:thumbnail_file_id;type:bigint unsigned;comment:封面" json:"thumbnail_file_id"`      // 封面
 	Description     string         `gorm:"column:description;type:varchar(256);not null;comment:简介" json:"description"`            // 简介
-	Content         string         `gorm:"column:content;type:varchar(191);comment:详细介绍" json:"content"`                           // 详细介绍
+	Content         string         `gorm:"column:content;type:text;comment:详细介绍" json:"content"`                                   // 详细介绍
 	Author          string         `gorm:"column:author;type:varchar(128);comment:原作者" json:"author"`                              // 原作者
 	Source          string         `gorm:"column:source;type:varchar(1024);comment:原书地址" json:"source"`                            // 原书地址
 	Isbn            string         `gorm:"column:isbn;type:varchar(64);comment:ISBN" json:"isbn"`                                  // ISBN

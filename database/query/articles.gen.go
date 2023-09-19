@@ -38,14 +38,14 @@ func newArticle(db *gorm.DB, opts ...gen.DOOption) article {
 	_article.ChapterID = field.NewUint64(tableName, "chapter_id")
 	_article.CategoryID = field.NewUint64(tableName, "category_id")
 	_article.PublishAt = field.NewTime(tableName, "publish_at")
-	_article.Type = field.NewInt64(tableName, "type")
-	_article.Format = field.NewInt64(tableName, "format")
+	_article.Type = field.NewField(tableName, "type")
+	_article.Format = field.NewField(tableName, "format")
 	_article.Title = field.NewString(tableName, "title")
 	_article.Keyword = field.NewString(tableName, "keyword")
 	_article.Description = field.NewString(tableName, "description")
-	_article.Thumbnails = field.NewString(tableName, "thumbnails")
-	_article.Videos = field.NewString(tableName, "videos")
-	_article.Audios = field.NewString(tableName, "audios")
+	_article.Thumbnails = field.NewField(tableName, "thumbnails")
+	_article.Videos = field.NewField(tableName, "videos")
+	_article.Audios = field.NewField(tableName, "audios")
 	_article.PostIP = field.NewString(tableName, "post_ip")
 	_article.Weight = field.NewUint64(tableName, "weight")
 
@@ -69,14 +69,14 @@ type article struct {
 	ChapterID   field.Uint64 // 章节ID
 	CategoryID  field.Uint64 // 分类
 	PublishAt   field.Time   // 发布时间
-	Type        field.Int64  // 文章类型
-	Format      field.Int64  // 文章格式
+	Type        field.Field  // 文章类型
+	Format      field.Field  // 文章格式
 	Title       field.String // 标题
 	Keyword     field.String // 关键词
 	Description field.String // 简介
-	Thumbnails  field.String // 缩略图
-	Videos      field.String // 视频
-	Audios      field.String // 音频
+	Thumbnails  field.Field  // 缩略图
+	Videos      field.Field  // 视频
+	Audios      field.Field  // 音频
 	PostIP      field.String // 发布IP
 	Weight      field.Uint64 // 权重
 
@@ -106,14 +106,14 @@ func (a *article) updateTableName(table string) *article {
 	a.ChapterID = field.NewUint64(table, "chapter_id")
 	a.CategoryID = field.NewUint64(table, "category_id")
 	a.PublishAt = field.NewTime(table, "publish_at")
-	a.Type = field.NewInt64(table, "type")
-	a.Format = field.NewInt64(table, "format")
+	a.Type = field.NewField(table, "type")
+	a.Format = field.NewField(table, "format")
 	a.Title = field.NewString(table, "title")
 	a.Keyword = field.NewString(table, "keyword")
 	a.Description = field.NewString(table, "description")
-	a.Thumbnails = field.NewString(table, "thumbnails")
-	a.Videos = field.NewString(table, "videos")
-	a.Audios = field.NewString(table, "audios")
+	a.Thumbnails = field.NewField(table, "thumbnails")
+	a.Videos = field.NewField(table, "videos")
+	a.Audios = field.NewField(table, "audios")
 	a.PostIP = field.NewString(table, "post_ip")
 	a.Weight = field.NewUint64(table, "weight")
 

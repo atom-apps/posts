@@ -24,7 +24,7 @@ type Chapter struct {
 	BookID      uint64         `gorm:"column:book_id;type:bigint unsigned;comment:书ID" json:"book_id"`                         // 书ID
 	Title       string         `gorm:"column:title;type:varchar(128);not null;comment:章节名" json:"title"`                       // 章节名
 	Description string         `gorm:"column:description;type:varchar(256);not null;comment:简介" json:"description"`            // 简介
-	Content     string         `gorm:"column:content;type:varchar(191);comment:详细介绍" json:"content"`                           // 详细介绍
+	Content     string         `gorm:"column:content;type:text;comment:详细介绍" json:"content"`                                   // 详细介绍
 }
 
 func (*Chapter) TableName(namer schema.Namer) string {

@@ -12,7 +12,7 @@ func (m *Migration20230918_092605CreateBook) table() interface{} {
 		Title           string `gorm:"size:128;not null;default:'';comment:书名"`
 		ThumbnailFileID uint   `gorm:"default:0;comment:封面"`
 		Description     string `gorm:"size:256;not null;default:'';comment:简介"`
-		Content         string `gorm:"comment:详细介绍"`
+		Content         string `gorm:"type:text;comment:详细介绍"`
 		Author          string `gorm:"size:128;comment:原作者"`
 		Source          string `gorm:"size:1024;comment:原书地址"`
 		ISBN            string `gorm:"size:64;comment:ISBN"`

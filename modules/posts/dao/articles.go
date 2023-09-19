@@ -85,15 +85,6 @@ func (dao *ArticleDao) decorateQueryFilter(query query.IArticleDo, queryFilter *
 	if queryFilter.Description != nil {
 		query = query.Where(dao.query.Article.Description.Eq(*queryFilter.Description))
 	}
-	if queryFilter.Thumbnails != nil {
-		query = query.Where(dao.query.Article.Thumbnails.Eq(*queryFilter.Thumbnails))
-	}
-	if queryFilter.Videos != nil {
-		query = query.Where(dao.query.Article.Videos.Eq(*queryFilter.Videos))
-	}
-	if queryFilter.Audios != nil {
-		query = query.Where(dao.query.Article.Audios.Eq(*queryFilter.Audios))
-	}
 	if queryFilter.PostIP != nil {
 		query = query.Where(dao.query.Article.PostIP.Eq(*queryFilter.PostIP))
 	}

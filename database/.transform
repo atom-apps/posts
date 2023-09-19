@@ -1,0 +1,5 @@
+articles.type => consts.ArticleType
+articles.format => consts.ArticleFormat
+articles.thumbnails => common.ArticleThumbnails
+articles.videos => common.ArticleVideos
+articles.audios => common.ArticleAudios
