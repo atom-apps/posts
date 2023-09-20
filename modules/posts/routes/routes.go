@@ -14,13 +14,16 @@ func Provide(opts ...opt.Option) error {
 	return container.Container.Provide(newRoute, atom.GroupRoutes)
 }
 
-func newRoute(svc contracts.HttpService, chapterController *controller.ChapterController, bookController *controller.BookController, articleController *controller.ArticleController, articleDigController *controller.ArticleDigController, articleContentController *controller.ArticleContentController) contracts.HttpRoute {
+func newRoute(
+	svc contracts.HttpService,
+	chapterController *controller.ChapterController,
+	bookController *controller.BookController,
+	articleController *controller.ArticleController,
+) contracts.HttpRoute {
 	engine := svc.GetEngine().(*fiber.App)
 	group := engine.Group("/v1/posts")
 	log.Infof("register route group: %s", group.(*fiber.Group).Prefix)
 
-	routeArticleContentController(group, articleContentController)
-	routeArticleDigController(group, articleDigController)
 	routeArticleController(group, articleController)
 	routeBookController(group, bookController)
 	routeChapterController(group, chapterController)

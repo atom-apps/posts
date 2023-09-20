@@ -42,6 +42,39 @@ func Provide(opts ...opt.Option) error {
 
 	if err := container.Container.Provide(func(
 		query *query.Query,
+	) (*ArticleForwardSourceDao, error) {
+		obj := &ArticleForwardSourceDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ArticlePaidUserDao, error) {
+		obj := &ArticlePaidUserDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+	) (*ArticlePaymentDao, error) {
+		obj := &ArticlePaymentDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
 	) (*ArticleDao, error) {
 		obj := &ArticleDao{
 			query: query,

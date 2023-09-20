@@ -8,28 +8,6 @@ import (
 
 func Provide(opts ...opt.Option) error {
 	if err := container.Container.Provide(func(
-		articleContentSvc *service.ArticleContentService,
-	) (*ArticleContentController, error) {
-		obj := &ArticleContentController{
-			articleContentSvc: articleContentSvc,
-		}
-		return obj, nil
-	}); err != nil {
-		return err
-	}
-
-	if err := container.Container.Provide(func(
-		articleDigSvc *service.ArticleDigService,
-	) (*ArticleDigController, error) {
-		obj := &ArticleDigController{
-			articleDigSvc: articleDigSvc,
-		}
-		return obj, nil
-	}); err != nil {
-		return err
-	}
-
-	if err := container.Container.Provide(func(
 		articleSvc *service.ArticleService,
 	) (*ArticleController, error) {
 		obj := &ArticleController{
