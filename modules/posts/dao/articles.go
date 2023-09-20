@@ -2,6 +2,7 @@ package dao
 
 import (
 	"context"
+	"time"
 
 	"github.com/atom-apps/posts/common"
 	"github.com/atom-apps/posts/database/models"
@@ -44,6 +45,7 @@ func (dao *ArticleDao) decorateSortQueryFilter(query query.IArticleDo, sortFilte
 			orderExprs = append(orderExprs, expr.Desc())
 		}
 	}
+	orderExprs = append(orderExprs, dao.query.Article.Weight.Desc())
 	return query.Order(orderExprs...)
 }
 
@@ -69,8 +71,8 @@ func (dao *ArticleDao) decorateQueryFilter(query query.IArticleDo, queryFilter *
 	if queryFilter.CategoryID != nil {
 		query = query.Where(dao.query.Article.CategoryID.Eq(*queryFilter.CategoryID))
 	}
-	if queryFilter.PublishAt != nil {
-		query = query.Where(dao.query.Article.PublishAt.Eq(*queryFilter.PublishAt))
+	if queryFilter.Published != nil {
+		query = query.Where(query.Where(dao.query.Article.PublishAt.Lt(time.Now())).Or(dao.query.Article.PublishAt.IsNull()))
 	}
 	if queryFilter.Type != nil {
 		query = query.Where(dao.query.Article.Type.Eq(*queryFilter.Type))
@@ -89,9 +91,6 @@ func (dao *ArticleDao) decorateQueryFilter(query query.IArticleDo, queryFilter *
 	}
 	if queryFilter.PostIP != nil {
 		query = query.Where(dao.query.Article.PostIP.Eq(*queryFilter.PostIP))
-	}
-	if queryFilter.Weight != nil {
-		query = query.Where(dao.query.Article.Weight.Eq(*queryFilter.Weight))
 	}
 
 	return query
@@ -295,12 +294,8 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 			forward.Source,
 			forward.SourceAuthor,
 		).
-		// LeftJoin(attachment, attachment.ArticleID.EqCol(article.ID)).
-		// LeftJoin(content, content.ArticleID.EqCol(article.ID)).
 		LeftJoin(dig, dig.ArticleID.EqCol(article.ID)).
 		LeftJoin(forward, forward.ArticleID.EqCol(article.ID)).
-		// LeftJoin(paidUser, paidUser.ArticleID.EqCol(article.ID)).
-		// LeftJoin(payment, payment.ArticleID.EqCol(article.ID)).
 		ScanByPage(&items, pageFilter.Offset(), pageFilter.Limit)
 	if err != nil {
 		return nil, 0, err

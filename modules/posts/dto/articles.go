@@ -34,14 +34,13 @@ type ArticleListQueryFilter struct {
 	BookID      *uint64               `query:"book_id" json:"book_id,omitempty"`         // 书ID
 	ChapterID   *uint64               `query:"chapter_id" json:"chapter_id,omitempty"`   // 章节ID
 	CategoryID  *uint64               `query:"category_id" json:"category_id,omitempty"` // 分类
-	PublishAt   *time.Time            `query:"publish_at" json:"publish_at,omitempty"`   // 发布时间
 	Type        *consts.ArticleType   `query:"type" json:"type,omitempty"`               // 文章类型
 	Format      *consts.ArticleFormat `query:"format" json:"format,omitempty"`           // 文章格式
 	Title       *string               `query:"title" json:"title,omitempty"`             // 标题
 	Keyword     *string               `query:"keyword" json:"keyword,omitempty"`         // 关键词
 	Description *string               `query:"description" json:"description,omitempty"` // 简介
 	PostIP      *string               `query:"post_ip" json:"post_ip,omitempty"`         // 发布IP
-	Weight      *uint64               `query:"weight" json:"weight,omitempty"`           // 权重
+	Published   *bool                 `query:"published" json:"published,omitempty"`     // 是否发布
 }
 
 type ArticleItem struct {
