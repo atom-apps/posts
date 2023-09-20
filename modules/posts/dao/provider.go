@@ -75,9 +75,22 @@ func Provide(opts ...opt.Option) error {
 
 	if err := container.Container.Provide(func(
 		query *query.Query,
+	) (*ArticleTagDao, error) {
+		obj := &ArticleTagDao{
+			query: query,
+		}
+		return obj, nil
+	}); err != nil {
+		return err
+	}
+
+	if err := container.Container.Provide(func(
+		query *query.Query,
+		tagDao *ArticleTagDao,
 	) (*ArticleDao, error) {
 		obj := &ArticleDao{
-			query: query,
+			query:  query,
+			tagDao: tagDao,
 		}
 		return obj, nil
 	}); err != nil {

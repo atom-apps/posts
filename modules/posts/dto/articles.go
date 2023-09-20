@@ -72,6 +72,7 @@ type ArticleItem struct {
 	Content       ArticleContentItem       `json:"content,omitempty"`        // 内容
 	ForwardSource ArticleForwardSourceItem `json:"forward_source,omitempty"` // 转发源
 	Payments      []ArticlePaymentItem     `json:"payment,omitempty"`        // 支付
+	Tags          []string                 `json:"tags,omitempty"`           // Tag
 }
 
 type ArticleDigItem struct {

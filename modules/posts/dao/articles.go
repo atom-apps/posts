@@ -14,7 +14,8 @@ import (
 
 // @provider
 type ArticleDao struct {
-	query *query.Query
+	query  *query.Query
+	tagDao *ArticleTagDao
 }
 
 func (dao *ArticleDao) Transaction(f func() error) error {
@@ -223,9 +224,11 @@ func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem
 			Source:       item.Source,
 			SourceAuthor: item.SourceAuthor,
 		},
-		// Attachments: []dto.ArticleAttachmentItem{},
-		// Payments: "//",
 	}
+	if tags, err := dao.tagDao.GetByArticleID(ctx, item.ID); err == nil {
+		ret.Tags = tags
+	}
+
 	if resources, ok := attachments[item.ID]; ok {
 		ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) dto.ArticleAttachmentItem {
 			return dto.ArticleAttachmentItem{
@@ -319,6 +322,11 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 	}
 	payments := lo.GroupBy(paymentModels, func(item *models.ArticlePayment) uint64 { return item.ID })
 
+	tags, err := dao.tagDao.GetByArticleIDs(ctx, ids)
+	if err != nil {
+		return nil, 0, err
+	}
+
 	results := lo.Map(items, func(item *articleQueryItem, _ int) *dto.ArticleItem {
 		ret := &dto.ArticleItem{
 			ID:          item.ID,
@@ -359,6 +367,10 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 			// Attachments: []dto.ArticleAttachmentItem{},
 			// Payments: "//",
 		}
+		if resources, ok := tags[item.ID]; ok {
+			ret.Tags = resources
+		}
+
 		if resources, ok := attachments[item.ID]; ok {
 			ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) dto.ArticleAttachmentItem {
 				return dto.ArticleAttachmentItem{

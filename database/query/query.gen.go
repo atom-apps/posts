@@ -24,9 +24,11 @@ var (
 	ArticleForwardSource *articleForwardSource
 	ArticlePaidUser      *articlePaidUser
 	ArticlePayment       *articlePayment
+	ArticleTag           *articleTag
 	Book                 *book
 	Chapter              *chapter
 	Migration            *migration
+	Tag                  *tag
 )
 
 func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
@@ -38,9 +40,11 @@ func SetDefault(db *gorm.DB, opts ...gen.DOOption) {
 	ArticleForwardSource = &Q.ArticleForwardSource
 	ArticlePaidUser = &Q.ArticlePaidUser
 	ArticlePayment = &Q.ArticlePayment
+	ArticleTag = &Q.ArticleTag
 	Book = &Q.Book
 	Chapter = &Q.Chapter
 	Migration = &Q.Migration
+	Tag = &Q.Tag
 }
 
 func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
@@ -53,9 +57,11 @@ func Use(db *gorm.DB, opts ...gen.DOOption) *Query {
 		ArticleForwardSource: newArticleForwardSource(db, opts...),
 		ArticlePaidUser:      newArticlePaidUser(db, opts...),
 		ArticlePayment:       newArticlePayment(db, opts...),
+		ArticleTag:           newArticleTag(db, opts...),
 		Book:                 newBook(db, opts...),
 		Chapter:              newChapter(db, opts...),
 		Migration:            newMigration(db, opts...),
+		Tag:                  newTag(db, opts...),
 	}
 }
 
@@ -69,9 +75,11 @@ type Query struct {
 	ArticleForwardSource articleForwardSource
 	ArticlePaidUser      articlePaidUser
 	ArticlePayment       articlePayment
+	ArticleTag           articleTag
 	Book                 book
 	Chapter              chapter
 	Migration            migration
+	Tag                  tag
 }
 
 func (q *Query) Available() bool { return q.db != nil }
@@ -86,9 +94,11 @@ func (q *Query) clone(db *gorm.DB) *Query {
 		ArticleForwardSource: q.ArticleForwardSource.clone(db),
 		ArticlePaidUser:      q.ArticlePaidUser.clone(db),
 		ArticlePayment:       q.ArticlePayment.clone(db),
+		ArticleTag:           q.ArticleTag.clone(db),
 		Book:                 q.Book.clone(db),
 		Chapter:              q.Chapter.clone(db),
 		Migration:            q.Migration.clone(db),
+		Tag:                  q.Tag.clone(db),
 	}
 }
 
@@ -110,9 +120,11 @@ func (q *Query) ReplaceDB(db *gorm.DB) *Query {
 		ArticleForwardSource: q.ArticleForwardSource.replaceDB(db),
 		ArticlePaidUser:      q.ArticlePaidUser.replaceDB(db),
 		ArticlePayment:       q.ArticlePayment.replaceDB(db),
+		ArticleTag:           q.ArticleTag.replaceDB(db),
 		Book:                 q.Book.replaceDB(db),
 		Chapter:              q.Chapter.replaceDB(db),
 		Migration:            q.Migration.replaceDB(db),
+		Tag:                  q.Tag.replaceDB(db),
 	}
 }
 
@@ -124,9 +136,11 @@ type queryCtx struct {
 	ArticleForwardSource IArticleForwardSourceDo
 	ArticlePaidUser      IArticlePaidUserDo
 	ArticlePayment       IArticlePaymentDo
+	ArticleTag           IArticleTagDo
 	Book                 IBookDo
 	Chapter              IChapterDo
 	Migration            IMigrationDo
+	Tag                  ITagDo
 }
 
 func (q *Query) WithContext(ctx context.Context) *queryCtx {
@@ -138,9 +152,11 @@ func (q *Query) WithContext(ctx context.Context) *queryCtx {
 		ArticleForwardSource: q.ArticleForwardSource.WithContext(ctx),
 		ArticlePaidUser:      q.ArticlePaidUser.WithContext(ctx),
 		ArticlePayment:       q.ArticlePayment.WithContext(ctx),
+		ArticleTag:           q.ArticleTag.WithContext(ctx),
 		Book:                 q.Book.WithContext(ctx),
 		Chapter:              q.Chapter.WithContext(ctx),
 		Migration:            q.Migration.WithContext(ctx),
+		Tag:                  q.Tag.WithContext(ctx),
 	}
 }
 

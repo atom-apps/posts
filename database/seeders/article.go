@@ -77,6 +77,23 @@ func (s *ArticleSeeder) Run(faker *gofakeit.Faker, db *gorm.DB) {
 		return &data
 	})
 	db.CreateInBatches(&forwards, 100)
+
+	// tags
+	lo.Times(5, func(index int) int {
+		tags := lo.Times(times, func(idx int) *models.ArticleTag {
+			data := s.GenerateTag(faker, idx+1)
+			return &data
+		})
+		db.CreateInBatches(&tags, 100)
+		return index
+	})
+}
+
+func (s *ArticleSeeder) GenerateTag(faker *gofakeit.Faker, idx int) models.ArticleTag {
+	return models.ArticleTag{
+		ArticleID: uint64(idx),
+		TagID:     uint64(faker.Number(1, 100)),
+	}
 }
 
 func (s *ArticleSeeder) GenerateForward(faker *gofakeit.Faker, idx int) models.ArticleForwardSource {

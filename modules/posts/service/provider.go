@@ -9,9 +9,21 @@ import (
 func Provide(opts ...opt.Option) error {
 	if err := container.Container.Provide(func(
 		articleDao *dao.ArticleDao,
+		attachmentDao *dao.ArticleAttachmentDao,
+		contentDao *dao.ArticleContentDao,
+		digDao *dao.ArticleDigDao,
+		forwardSourceDao *dao.ArticleForwardSourceDao,
+		paidUserDao *dao.ArticlePaidUserDao,
+		paymentDao *dao.ArticlePaymentDao,
 	) (*ArticleService, error) {
 		obj := &ArticleService{
-			articleDao: articleDao,
+			articleDao:       articleDao,
+			attachmentDao:    attachmentDao,
+			contentDao:       contentDao,
+			digDao:           digDao,
+			forwardSourceDao: forwardSourceDao,
+			paidUserDao:      paidUserDao,
+			paymentDao:       paymentDao,
 		}
 		return obj, nil
 	}); err != nil {
