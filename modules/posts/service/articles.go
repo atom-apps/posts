@@ -13,7 +13,13 @@ import (
 
 // @provider
 type ArticleService struct {
-	articleDao *dao.ArticleDao
+	articleDao       *dao.ArticleDao
+	attachmentDao    *dao.ArticleAttachmentDao
+	contentDao       *dao.ArticleContentDao
+	digDao           *dao.ArticleDigDao
+	forwardSourceDao *dao.ArticleForwardSourceDao
+	paidUserDao      *dao.ArticlePaidUserDao
+	paymentDao       *dao.ArticlePaymentDao
 }
 
 func (svc *ArticleService) DecorateItem(model *models.Article, id int) *dto.ArticleItem {
