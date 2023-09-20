@@ -10,8 +10,8 @@ func (m *Migration20230918_104216CreateArticleContent) table() interface{} {
 		Model
 		ModelWithUser
 		ModelWithArticle
-		FreeContent  string `gorm:"comment:内容"`
-		PriceContent string `gorm:"comment:付费内容"`
+		FreeContent  string `gorm:"type:text;comment:内容"`
+		PriceContent string `gorm:"type:text;comment:付费内容"`
 	}
 
 	return &ArticleContent{}

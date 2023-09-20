@@ -22,51 +22,15 @@ type ArticleService struct {
 	paymentDao       *dao.ArticlePaymentDao
 }
 
-func (svc *ArticleService) DecorateItem(model *models.Article, id int) *dto.ArticleItem {
-	return &dto.ArticleItem{
-		ID:          model.ID,
-		CreatedAt:   model.CreatedAt,
-		UpdatedAt:   model.UpdatedAt,
-		TenantID:    model.TenantID,
-		UserID:      model.UserID,
-		UUID:        model.UUID,
-		BookID:      model.BookID,
-		ChapterID:   model.ChapterID,
-		CategoryID:  model.CategoryID,
-		PublishAt:   model.PublishAt,
-		Type:        model.Type,
-		TypeCN:      model.Type.Cn(),
-		Format:      model.Format,
-		FormatCN:    model.Format.Cn(),
-		Title:       model.Title,
-		Keyword:     model.Keyword,
-		Description: model.Description,
-		Thumbnails:  model.Thumbnails,
-		Videos:      model.Videos,
-		Audios:      model.Audios,
-		PostIP:      model.PostIP,
-		Weight:      model.Weight,
-	}
+func (svc *ArticleService) DecorateItem(item *dto.ArticleItem, id int) *dto.ArticleItem {
+	return item
 }
 
-func (svc *ArticleService) GetByID(ctx context.Context, id uint64) (*models.Article, error) {
+func (svc *ArticleService) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem, error) {
 	return svc.articleDao.GetByID(ctx, id)
 }
 
-func (svc *ArticleService) FindByQueryFilter(
-	ctx context.Context,
-	queryFilter *dto.ArticleListQueryFilter,
-	sortFilter *common.SortQueryFilter,
-) ([]*models.Article, error) {
-	return svc.articleDao.FindByQueryFilter(ctx, queryFilter, sortFilter)
-}
-
-func (svc *ArticleService) PageByQueryFilter(
-	ctx context.Context,
-	queryFilter *dto.ArticleListQueryFilter,
-	pageFilter *common.PageQueryFilter,
-	sortFilter *common.SortQueryFilter,
-) ([]*models.Article, int64, error) {
+func (svc *ArticleService) PageByQueryFilter(ctx context.Context, queryFilter *dto.ArticleListQueryFilter, pageFilter *common.PageQueryFilter, sortFilter *common.SortQueryFilter) ([]*dto.ArticleItem, int64, error) {
 	return svc.articleDao.PageByQueryFilter(ctx, queryFilter, pageFilter.Format(), sortFilter)
 }
 
@@ -84,7 +48,7 @@ func (svc *ArticleService) Create(ctx context.Context, body *dto.ArticleForm) er
 
 // Update
 func (svc *ArticleService) Update(ctx context.Context, id uint64, body *dto.ArticleForm) error {
-	model, err := svc.GetByID(ctx, id)
+	model, err := svc.articleDao.GetModelByID(ctx, id)
 	if err != nil {
 		return err
 	}

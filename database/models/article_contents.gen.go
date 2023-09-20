@@ -22,8 +22,8 @@ type ArticleContent struct {
 	TenantID     uint64         `gorm:"column:tenant_id;type:bigint unsigned;comment:租户ID" json:"tenant_id"`                    // 租户ID
 	UserID       uint64         `gorm:"column:user_id;type:bigint unsigned;comment:用户ID" json:"user_id"`                        // 用户ID
 	ArticleID    uint64         `gorm:"column:article_id;type:bigint unsigned;comment:文章ID" json:"article_id"`                  // 文章ID
-	FreeContent  string         `gorm:"column:free_content;type:varchar(191);comment:内容" json:"free_content"`                   // 内容
-	PriceContent string         `gorm:"column:price_content;type:varchar(191);comment:付费内容" json:"price_content"`               // 付费内容
+	FreeContent  string         `gorm:"column:free_content;type:text;comment:内容" json:"free_content"`                           // 内容
+	PriceContent string         `gorm:"column:price_content;type:text;comment:付费内容" json:"price_content"`                       // 付费内容
 }
 
 func (*ArticleContent) TableName(namer schema.Namer) string {

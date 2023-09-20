@@ -7,6 +7,7 @@ import (
 	"github.com/atom-apps/posts/database/models"
 	"github.com/atom-apps/posts/database/query"
 	"github.com/atom-apps/posts/modules/posts/dto"
+	"github.com/samber/lo"
 
 	"gorm.io/gen/field"
 )
@@ -129,7 +130,130 @@ func (dao *ArticleDao) Create(ctx context.Context, model *models.Article) error 
 	return dao.Context(ctx).Create(model)
 }
 
-func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*models.Article, error) {
+func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem, error) {
+	type articleQueryItem struct {
+		models.Article
+		// content
+		FreeContent  string
+		PriceContent string
+		// digs
+		Views    uint64
+		Likes    uint64
+		Dislikes uint64
+		// source
+		Source       string
+		SourceAuthor string
+	}
+
+	article, content, dig, forward := dao.query.Article, dao.query.ArticleContent, dao.query.ArticleDig, dao.query.ArticleForwardSource
+
+	var item *articleQueryItem
+
+	err := dao.Context(ctx).
+		Select(
+			article.ALL,
+			// content
+			content.FreeContent,
+			content.PriceContent,
+
+			// dig
+			dig.Views,
+			dig.Likes,
+			dig.Dislikes,
+			// forwards
+			forward.Source,
+			forward.SourceAuthor,
+		).
+		// LeftJoin(attachment, attachment.ArticleID.EqCol(article.ID)).
+		LeftJoin(content, content.ArticleID.EqCol(article.ID)).
+		LeftJoin(dig, dig.ArticleID.EqCol(article.ID)).
+		LeftJoin(forward, forward.ArticleID.EqCol(article.ID)).
+		// LeftJoin(paidUser, paidUser.ArticleID.EqCol(article.ID)).
+		// LeftJoin(payment, payment.ArticleID.EqCol(article.ID)).
+		Scan(&item)
+	if err != nil {
+		return nil, err
+	}
+
+	attachmentModels, err := dao.query.ArticleAttachment.WithContext(ctx).Where(dao.query.ArticleAttachment.ArticleID.Eq(id)).Find()
+	if err != nil {
+		return nil, err
+	}
+	attachments := lo.GroupBy(attachmentModels, func(item *models.ArticleAttachment) uint64 { return item.ID })
+
+	paymentModels, err := dao.query.ArticlePayment.WithContext(ctx).Where(dao.query.ArticlePayment.ArticleID.Eq(id)).Find()
+	if err != nil {
+		return nil, err
+	}
+	payments := lo.GroupBy(paymentModels, func(item *models.ArticlePayment) uint64 { return item.ID })
+
+	ret := &dto.ArticleItem{
+		ID:          item.ID,
+		CreatedAt:   item.CreatedAt,
+		UpdatedAt:   item.UpdatedAt,
+		TenantID:    item.TenantID,
+		UserID:      item.UserID,
+		UUID:        item.UUID,
+		BookID:      item.BookID,
+		ChapterID:   item.CategoryID,
+		CategoryID:  item.CategoryID,
+		PublishAt:   item.PublishAt,
+		Type:        item.Type,
+		TypeCN:      item.Type.Cn(),
+		Format:      item.Format,
+		FormatCN:    item.Format.Cn(),
+		Title:       item.Title,
+		Keyword:     item.Keyword,
+		Description: item.Description,
+		Thumbnails:  item.Thumbnails,
+		Videos:      item.Videos,
+		Audios:      item.Audios,
+		PostIP:      item.PostIP,
+		Weight:      item.Weight,
+		Dig: dto.ArticleDigItem{
+			Views:    item.Views,
+			Likes:    item.Likes,
+			Dislikes: item.Dislikes,
+		},
+		Content: dto.ArticleContentItem{
+			FreeContent:  item.FreeContent,
+			PriceContent: item.PriceContent,
+		},
+		ForwardSource: dto.ArticleForwardSourceItem{
+			Source:       item.Source,
+			SourceAuthor: item.SourceAuthor,
+		},
+		// Attachments: []dto.ArticleAttachmentItem{},
+		// Payments: "//",
+	}
+	if resources, ok := attachments[item.ID]; ok {
+		ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) dto.ArticleAttachmentItem {
+			return dto.ArticleAttachmentItem{
+				FilesystemID: item.FilesystemID,
+				Description:  item.Description,
+				Password:     item.Password,
+			}
+		})
+	}
+
+	// payments
+	if resources, ok := payments[item.ID]; ok {
+		ret.Payments = lo.Map(resources, func(item *models.ArticlePayment, _ int) dto.ArticlePaymentItem {
+			return dto.ArticlePaymentItem{
+				PriceType:       item.PriceType,
+				Token:           item.Token,
+				Price:           item.Price,
+				Discount:        item.Discount,
+				DiscountStartAt: item.DiscountStartAt,
+				DiscountEndAt:   item.DiscountEndAt,
+			}
+		})
+	}
+
+	return ret, err
+}
+
+func (dao *ArticleDao) GetModelByID(ctx context.Context, id uint64) (*models.Article, error) {
 	return dao.Context(ctx).Where(dao.query.Article.ID.Eq(id)).First()
 }
 
@@ -137,41 +261,132 @@ func (dao *ArticleDao) GetByIDs(ctx context.Context, ids []uint64) ([]*models.Ar
 	return dao.Context(ctx).Where(dao.query.Article.ID.In(ids...)).Find()
 }
 
-func (dao *ArticleDao) PageByQueryFilter(
-	ctx context.Context,
-	queryFilter *dto.ArticleListQueryFilter,
-	pageFilter *common.PageQueryFilter,
-	sortFilter *common.SortQueryFilter,
-) ([]*models.Article, int64, error) {
-	query := dao.query.Article
-	articleQuery := query.WithContext(ctx)
-	articleQuery = dao.decorateQueryFilter(articleQuery, queryFilter)
-	articleQuery = dao.decorateSortQueryFilter(articleQuery, sortFilter)
-	return articleQuery.FindByPage(pageFilter.Offset(), pageFilter.Limit)
-}
+func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.ArticleListQueryFilter, pageFilter *common.PageQueryFilter, sortFilter *common.SortQueryFilter) ([]*dto.ArticleItem, int64, error) {
+	type articleQueryItem struct {
+		models.Article
+		// digs
+		Views    uint64
+		Likes    uint64
+		Dislikes uint64
+		// source
+		Source       string
+		SourceAuthor string
+	}
 
-func (dao *ArticleDao) FindByQueryFilter(
-	ctx context.Context,
-	queryFilter *dto.ArticleListQueryFilter,
-	sortFilter *common.SortQueryFilter,
-) ([]*models.Article, error) {
-	query := dao.query.Article
-	articleQuery := query.WithContext(ctx)
-	articleQuery = dao.decorateQueryFilter(articleQuery, queryFilter)
-	articleQuery = dao.decorateSortQueryFilter(articleQuery, sortFilter)
-	return articleQuery.Find()
-}
+	article, dig, forward := dao.query.Article, dao.query.ArticleDig, dao.query.ArticleForwardSource
 
-func (dao *ArticleDao) FirstByQueryFilter(
-	ctx context.Context,
-	queryFilter *dto.ArticleListQueryFilter,
-	sortFilter *common.SortQueryFilter,
-) (*models.Article, error) {
-	query := dao.query.Article
-	articleQuery := query.WithContext(ctx)
-	articleQuery = dao.decorateQueryFilter(articleQuery, queryFilter)
-	articleQuery = dao.decorateSortQueryFilter(articleQuery, sortFilter)
-	return articleQuery.First()
+	query := dao.Context(ctx)
+	query = dao.decorateQueryFilter(query, queryFilter)
+	query = dao.decorateSortQueryFilter(query, sortFilter)
+
+	var items []*articleQueryItem
+
+	count, err := query.
+		Select(
+			article.ALL,
+			// dig
+			dig.Views,
+			dig.Likes,
+			dig.Dislikes,
+			// forwards
+			forward.Source,
+			forward.SourceAuthor,
+		).
+		// LeftJoin(attachment, attachment.ArticleID.EqCol(article.ID)).
+		// LeftJoin(content, content.ArticleID.EqCol(article.ID)).
+		LeftJoin(dig, dig.ArticleID.EqCol(article.ID)).
+		LeftJoin(forward, forward.ArticleID.EqCol(article.ID)).
+		// LeftJoin(paidUser, paidUser.ArticleID.EqCol(article.ID)).
+		// LeftJoin(payment, payment.ArticleID.EqCol(article.ID)).
+		ScanByPage(&items, pageFilter.Offset(), pageFilter.Limit)
+	if err != nil {
+		return nil, 0, err
+	}
+
+	ids := lo.Map(items, func(item *articleQueryItem, _ int) uint64 {
+		return item.ID
+	})
+
+	attachmentModels, err := dao.query.ArticleAttachment.WithContext(ctx).Where(dao.query.ArticleAttachment.ArticleID.In(ids...)).Find()
+	if err != nil {
+		return nil, 0, err
+	}
+	attachments := lo.GroupBy(attachmentModels, func(item *models.ArticleAttachment) uint64 { return item.ID })
+
+	paymentModels, err := dao.query.ArticlePayment.WithContext(ctx).Where(dao.query.ArticlePayment.ArticleID.In(ids...)).Find()
+	if err != nil {
+		return nil, 0, err
+	}
+	payments := lo.GroupBy(paymentModels, func(item *models.ArticlePayment) uint64 { return item.ID })
+
+	results := lo.Map(items, func(item *articleQueryItem, _ int) *dto.ArticleItem {
+		ret := &dto.ArticleItem{
+			ID:          item.ID,
+			CreatedAt:   item.CreatedAt,
+			UpdatedAt:   item.UpdatedAt,
+			TenantID:    item.TenantID,
+			UserID:      item.UserID,
+			UUID:        item.UUID,
+			BookID:      item.BookID,
+			ChapterID:   item.CategoryID,
+			CategoryID:  item.CategoryID,
+			PublishAt:   item.PublishAt,
+			Type:        item.Type,
+			TypeCN:      item.Type.Cn(),
+			Format:      item.Format,
+			FormatCN:    item.Format.Cn(),
+			Title:       item.Title,
+			Keyword:     item.Keyword,
+			Description: item.Description,
+			Thumbnails:  item.Thumbnails,
+			Videos:      item.Videos,
+			Audios:      item.Audios,
+			PostIP:      item.PostIP,
+			Weight:      item.Weight,
+			Dig: dto.ArticleDigItem{
+				Views:    item.Views,
+				Likes:    item.Likes,
+				Dislikes: item.Dislikes,
+			},
+			Content: dto.ArticleContentItem{
+				FreeContent:  "",
+				PriceContent: "",
+			},
+			ForwardSource: dto.ArticleForwardSourceItem{
+				Source:       item.Source,
+				SourceAuthor: item.SourceAuthor,
+			},
+			// Attachments: []dto.ArticleAttachmentItem{},
+			// Payments: "//",
+		}
+		if resources, ok := attachments[item.ID]; ok {
+			ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) dto.ArticleAttachmentItem {
+				return dto.ArticleAttachmentItem{
+					FilesystemID: item.FilesystemID,
+					Description:  item.Description,
+					Password:     item.Password,
+				}
+			})
+		}
+
+		// payments
+		if resources, ok := payments[item.ID]; ok {
+			ret.Payments = lo.Map(resources, func(item *models.ArticlePayment, _ int) dto.ArticlePaymentItem {
+				return dto.ArticlePaymentItem{
+					PriceType:       item.PriceType,
+					Token:           item.Token,
+					Price:           item.Price,
+					Discount:        item.Discount,
+					DiscountStartAt: item.DiscountStartAt,
+					DiscountEndAt:   item.DiscountEndAt,
+				}
+			})
+		}
+
+		return ret
+	})
+
+	return results, count, err
 }
 
 // CountByBookID
