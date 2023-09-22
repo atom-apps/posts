@@ -3,18 +3,18 @@
 package routes
 
 import (
-	 "strings"
+	"strings"
 
+	"github.com/atom-apps/posts/common"
 	"github.com/atom-apps/posts/modules/posts/controller"
 	"github.com/atom-apps/posts/modules/posts/dto"
-	"github.com/atom-apps/posts/common"
 
 	"github.com/gofiber/fiber/v2"
 	. "github.com/rogeecn/fen"
 )
 
 func routeArticleController(engine fiber.Router, controller *controller.ArticleController) {
-	groupPrefix := "/"+strings.TrimLeft(engine.(*fiber.Group).Prefix,"/")
+	groupPrefix := "/" + strings.TrimLeft(engine.(*fiber.Group).Prefix, "/")
 	engine.Get(strings.TrimPrefix("/v1/posts/articles/:id<int>", groupPrefix), DataFunc1(controller.Show, Integer[uint64]("id", PathParamError)))
 	engine.Get(strings.TrimPrefix("/v1/posts/articles", groupPrefix), DataFunc3(controller.List, Query[dto.ArticleListQueryFilter](QueryParamError), Query[common.PageQueryFilter](QueryParamError), Query[common.SortQueryFilter](QueryParamError)))
 	engine.Post(strings.TrimPrefix("/v1/posts/articles", groupPrefix), Func1(controller.Create, Body[dto.ArticleForm](BodyParamError)))

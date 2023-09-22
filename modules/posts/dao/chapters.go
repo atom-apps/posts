@@ -7,7 +7,6 @@ import (
 	"github.com/atom-apps/posts/database/models"
 	"github.com/atom-apps/posts/database/query"
 	"github.com/atom-apps/posts/modules/posts/dto"
-
 	"gorm.io/gen/field"
 )
 

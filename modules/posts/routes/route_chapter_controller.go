@@ -3,18 +3,18 @@
 package routes
 
 import (
-	 "strings"
+	"strings"
 
+	"github.com/atom-apps/posts/common"
 	"github.com/atom-apps/posts/modules/posts/controller"
 	"github.com/atom-apps/posts/modules/posts/dto"
-	"github.com/atom-apps/posts/common"
 
 	"github.com/gofiber/fiber/v2"
 	. "github.com/rogeecn/fen"
 )
 
 func routeChapterController(engine fiber.Router, controller *controller.ChapterController) {
-	groupPrefix := "/"+strings.TrimLeft(engine.(*fiber.Group).Prefix,"/")
+	groupPrefix := "/" + strings.TrimLeft(engine.(*fiber.Group).Prefix, "/")
 	engine.Get(strings.TrimPrefix("/v1/posts/books/:bookId<int>/chapters/:id<int>", groupPrefix), DataFunc2(controller.Show, Integer[uint64]("bookId", PathParamError), Integer[uint64]("id", PathParamError)))
 	engine.Get(strings.TrimPrefix("/v1/posts/books/:bookId<int>/chapters", groupPrefix), DataFunc4(controller.List, Integer[uint64]("bookId", PathParamError), Query[dto.ChapterListQueryFilter](QueryParamError), Query[common.PageQueryFilter](QueryParamError), Query[common.SortQueryFilter](QueryParamError)))
 	engine.Post(strings.TrimPrefix("/v1/posts/books/:bookId<int>/chapters", groupPrefix), Func2(controller.Create, Integer[int]("bookId", PathParamError), Body[dto.ChapterForm](BodyParamError)))

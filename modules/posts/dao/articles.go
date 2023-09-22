@@ -9,7 +9,6 @@ import (
 	"github.com/atom-apps/posts/database/query"
 	"github.com/atom-apps/posts/modules/posts/dto"
 	"github.com/samber/lo"
-
 	"gorm.io/gen/field"
 )
 

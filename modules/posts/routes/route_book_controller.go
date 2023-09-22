@@ -3,18 +3,18 @@
 package routes
 
 import (
-	 "strings"
+	"strings"
 
+	"github.com/atom-apps/posts/common"
 	"github.com/atom-apps/posts/modules/posts/controller"
 	"github.com/atom-apps/posts/modules/posts/dto"
-	"github.com/atom-apps/posts/common"
 
 	"github.com/gofiber/fiber/v2"
 	. "github.com/rogeecn/fen"
 )
 
 func routeBookController(engine fiber.Router, controller *controller.BookController) {
-	groupPrefix := "/"+strings.TrimLeft(engine.(*fiber.Group).Prefix,"/")
+	groupPrefix := "/" + strings.TrimLeft(engine.(*fiber.Group).Prefix, "/")
 	engine.Get(strings.TrimPrefix("/v1/posts/books/:id<int>", groupPrefix), DataFunc1(controller.Show, Integer[uint64]("id", PathParamError)))
 	engine.Get(strings.TrimPrefix("/v1/posts/books", groupPrefix), DataFunc3(controller.List, Query[dto.BookListQueryFilter](QueryParamError), Query[common.PageQueryFilter](QueryParamError), Query[common.SortQueryFilter](QueryParamError)))
 	engine.Post(strings.TrimPrefix("/v1/posts/books", groupPrefix), Func1(controller.Create, Body[dto.BookForm](BodyParamError)))
