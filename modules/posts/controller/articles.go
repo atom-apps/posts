@@ -100,3 +100,8 @@ func (c *ArticleController) Update(ctx *fiber.Ctx, id uint64, body *dto.ArticleF
 func (c *ArticleController) Delete(ctx *fiber.Ctx, id uint64) error {
 	return c.articleSvc.Delete(ctx.Context(), id)
 }
+
+// get price content by id
+// get price attachment by id
+// is user paid for this article
+// TODO: calculate thumbnails
