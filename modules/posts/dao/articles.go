@@ -148,27 +148,25 @@ func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem
 
 	var item *articleQueryItem
 
-	err := dao.Context(ctx).
-		Select(
-			article.ALL,
-			// content
-			content.FreeContent,
-			content.PriceContent,
+	fields := []field.Expr{
+		article.ALL,
+		// content
+		content.FreeContent,
+		content.PriceContent,
 
-			// dig
-			dig.Views,
-			dig.Likes,
-			dig.Dislikes,
-			// forwards
-			forward.Source,
-			forward.SourceAuthor,
-		).
-		// LeftJoin(attachment, attachment.ArticleID.EqCol(article.ID)).
-		LeftJoin(content, content.ArticleID.EqCol(article.ID)).
+		// dig
+		dig.Views,
+		dig.Likes,
+		dig.Dislikes,
+		// forwards
+		forward.Source,
+		forward.SourceAuthor,
+	}
+	err := dao.Context(ctx).
+		Select(fields...).
 		LeftJoin(dig, dig.ArticleID.EqCol(article.ID)).
 		LeftJoin(forward, forward.ArticleID.EqCol(article.ID)).
-		// LeftJoin(paidUser, paidUser.ArticleID.EqCol(article.ID)).
-		// LeftJoin(payment, payment.ArticleID.EqCol(article.ID)).
+		LeftJoin(content, content.ArticleID.EqCol(article.ID)).
 		Scan(&item)
 	if err != nil {
 		return nil, err
@@ -186,7 +184,10 @@ func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem
 	}
 	payments := lo.GroupBy(paymentModels, func(item *models.ArticlePayment) uint64 { return item.ID })
 
-	ret := &dto.ArticleItem{}
+	ret := &dto.ArticleItem{
+		FormatCN: item.Format.Cn(),
+		TypeCN:   item.Type.Cn(),
+	}
 
 	if err := ret.Fill(item); err != nil {
 		return nil, err
@@ -258,17 +259,19 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 
 	var items []*articleQueryItem
 
+	fields := []field.Expr{
+		article.ALL,
+		// dig
+		dig.Views,
+		dig.Likes,
+		dig.Dislikes,
+		// forwards
+		forward.Source,
+		forward.SourceAuthor,
+	}
+
 	count, err := query.
-		Select(
-			article.ALL,
-			// dig
-			dig.Views,
-			dig.Likes,
-			dig.Dislikes,
-			// forwards
-			forward.Source,
-			forward.SourceAuthor,
-		).
+		Select(fields...).
 		LeftJoin(dig, dig.ArticleID.EqCol(article.ID)).
 		LeftJoin(forward, forward.ArticleID.EqCol(article.ID)).
 		ScanByPage(&items, pageFilter.Offset(), pageFilter.Limit)
@@ -298,7 +301,10 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 	}
 
 	results := lo.Map(items, func(item *articleQueryItem, _ int) *dto.ArticleItem {
-		ret := &dto.ArticleItem{}
+		ret := &dto.ArticleItem{
+			FormatCN: item.Format.Cn(),
+			TypeCN:   item.Type.Cn(),
+		}
 
 		ret.Fill(item)
 		ret.Dig = dto.ArticleDigItemFillWith(item)
