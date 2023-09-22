@@ -10,6 +10,7 @@ func (m *Migration20230920_144751CreateTag) table() interface{} {
 		Model
 		Name  string `gorm:"size:12;not null;comment:名称"`
 		Count uint   `gorm:"comment:引用次数"`
+		Views uint   `gorm:"comment:点击次数"`
 	}
 
 	return &Tag{}

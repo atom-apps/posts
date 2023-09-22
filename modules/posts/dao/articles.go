@@ -186,50 +186,26 @@ func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem
 	}
 	payments := lo.GroupBy(paymentModels, func(item *models.ArticlePayment) uint64 { return item.ID })
 
-	ret := &dto.ArticleItem{
-		ID:          item.ID,
-		CreatedAt:   item.CreatedAt,
-		UpdatedAt:   item.UpdatedAt,
-		TenantID:    item.TenantID,
-		UserID:      item.UserID,
-		UUID:        item.UUID,
-		BookID:      item.BookID,
-		ChapterID:   item.CategoryID,
-		CategoryID:  item.CategoryID,
-		PublishAt:   item.PublishAt,
-		Type:        item.Type,
-		TypeCN:      item.Type.Cn(),
-		Format:      item.Format,
-		FormatCN:    item.Format.Cn(),
-		Title:       item.Title,
-		Keyword:     item.Keyword,
-		Description: item.Description,
-		Thumbnails:  item.Thumbnails,
-		Videos:      item.Videos,
-		Audios:      item.Audios,
-		PostIP:      item.PostIP,
-		Weight:      item.Weight,
-		Dig: dto.ArticleDigItem{
-			Views:    item.Views,
-			Likes:    item.Likes,
-			Dislikes: item.Dislikes,
-		},
-		Content: dto.ArticleContentItem{
-			FreeContent:  item.FreeContent,
-			PriceContent: item.PriceContent,
-		},
-		ForwardSource: dto.ArticleForwardSourceItem{
-			Source:       item.Source,
-			SourceAuthor: item.SourceAuthor,
-		},
+	ret := &dto.ArticleItem{}
+
+	if err := ret.Fill(item); err != nil {
+		return nil, err
 	}
+
+	ret.Dig = dto.ArticleDigItemFillWith(item)
+	ret.ForwardSource = dto.ArticleForwardSourceItemFillWith(item)
+	ret.Content = &dto.ArticleContentItem{
+		FreeContent:  item.FreeContent,
+		PriceContent: item.PriceContent,
+	}
+
 	if tags, err := dao.tagDao.GetByArticleID(ctx, item.ID); err == nil {
 		ret.Tags = tags
 	}
 
 	if resources, ok := attachments[item.ID]; ok {
-		ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) dto.ArticleAttachmentItem {
-			return dto.ArticleAttachmentItem{
+		ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) *dto.ArticleAttachmentItem {
+			return &dto.ArticleAttachmentItem{
 				FilesystemID: item.FilesystemID,
 				Description:  item.Description,
 				Password:     item.Password,
@@ -239,8 +215,8 @@ func (dao *ArticleDao) GetByID(ctx context.Context, id uint64) (*dto.ArticleItem
 
 	// payments
 	if resources, ok := payments[item.ID]; ok {
-		ret.Payments = lo.Map(resources, func(item *models.ArticlePayment, _ int) dto.ArticlePaymentItem {
-			return dto.ArticlePaymentItem{
+		ret.Payments = lo.Map(resources, func(item *models.ArticlePayment, _ int) *dto.ArticlePaymentItem {
+			return &dto.ArticlePaymentItem{
 				PriceType:       item.PriceType,
 				Token:           item.Token,
 				Price:           item.Price,
@@ -322,52 +298,23 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 	}
 
 	results := lo.Map(items, func(item *articleQueryItem, _ int) *dto.ArticleItem {
-		ret := &dto.ArticleItem{
-			ID:          item.ID,
-			CreatedAt:   item.CreatedAt,
-			UpdatedAt:   item.UpdatedAt,
-			TenantID:    item.TenantID,
-			UserID:      item.UserID,
-			UUID:        item.UUID,
-			BookID:      item.BookID,
-			ChapterID:   item.CategoryID,
-			CategoryID:  item.CategoryID,
-			PublishAt:   item.PublishAt,
-			Type:        item.Type,
-			TypeCN:      item.Type.Cn(),
-			Format:      item.Format,
-			FormatCN:    item.Format.Cn(),
-			Title:       item.Title,
-			Keyword:     item.Keyword,
-			Description: item.Description,
-			Thumbnails:  item.Thumbnails,
-			Videos:      item.Videos,
-			Audios:      item.Audios,
-			PostIP:      item.PostIP,
-			Weight:      item.Weight,
-			Dig: dto.ArticleDigItem{
-				Views:    item.Views,
-				Likes:    item.Likes,
-				Dislikes: item.Dislikes,
-			},
-			Content: dto.ArticleContentItem{
-				FreeContent:  "",
-				PriceContent: "",
-			},
-			ForwardSource: dto.ArticleForwardSourceItem{
-				Source:       item.Source,
-				SourceAuthor: item.SourceAuthor,
-			},
-			// Attachments: []dto.ArticleAttachmentItem{},
-			// Payments: "//",
+		ret := &dto.ArticleItem{}
+
+		ret.Fill(item)
+		ret.Dig = dto.ArticleDigItemFillWith(item)
+		ret.ForwardSource = dto.ArticleForwardSourceItemFillWith(item)
+		ret.Content = &dto.ArticleContentItem{
+			FreeContent:  "",
+			PriceContent: "",
 		}
+
 		if resources, ok := tags[item.ID]; ok {
 			ret.Tags = resources
 		}
 
 		if resources, ok := attachments[item.ID]; ok {
-			ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) dto.ArticleAttachmentItem {
-				return dto.ArticleAttachmentItem{
+			ret.Attachments = lo.Map(resources, func(item *models.ArticleAttachment, _ int) *dto.ArticleAttachmentItem {
+				return &dto.ArticleAttachmentItem{
 					FilesystemID: item.FilesystemID,
 					Description:  item.Description,
 					Password:     item.Password,
@@ -377,8 +324,8 @@ func (dao *ArticleDao) PageByQueryFilter(ctx context.Context, queryFilter *dto.A
 
 		// payments
 		if resources, ok := payments[item.ID]; ok {
-			ret.Payments = lo.Map(resources, func(item *models.ArticlePayment, _ int) dto.ArticlePaymentItem {
-				return dto.ArticlePaymentItem{
+			ret.Payments = lo.Map(resources, func(item *models.ArticlePayment, _ int) *dto.ArticlePaymentItem {
+				return &dto.ArticlePaymentItem{
 					PriceType:       item.PriceType,
 					Token:           item.Token,
 					Price:           item.Price,
