@@ -108,7 +108,7 @@ func (s *ArticleSeeder) GenerateForward(faker *gofakeit.Faker, idx int) models.A
 func (s *ArticleSeeder) GeneratePayment(faker *gofakeit.Faker, idx int) models.ArticlePayment {
 	return models.ArticlePayment{
 		ArticleID:       uint64(idx),
-		PriceType:       int64(consts.ArticlePriceTypeContent),
+		PriceType:       consts.ArticlePriceTypeContent,
 		Token:           faker.Password(true, false, true, false, false, 4),
 		Price:           uint64(faker.Price(0, 100)),
 		Discount:        uint64(faker.Number(0, 100)),

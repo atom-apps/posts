@@ -30,7 +30,7 @@ func newArticlePayment(db *gorm.DB, opts ...gen.DOOption) articlePayment {
 	_articlePayment.ID = field.NewUint64(tableName, "id")
 	_articlePayment.CreatedAt = field.NewTime(tableName, "created_at")
 	_articlePayment.ArticleID = field.NewUint64(tableName, "article_id")
-	_articlePayment.PriceType = field.NewInt64(tableName, "price_type")
+	_articlePayment.PriceType = field.NewField(tableName, "price_type")
 	_articlePayment.Token = field.NewString(tableName, "token")
 	_articlePayment.Price = field.NewUint64(tableName, "price")
 	_articlePayment.Discount = field.NewUint64(tableName, "discount")
@@ -49,7 +49,7 @@ type articlePayment struct {
 	ID              field.Uint64 // ID
 	CreatedAt       field.Time   // 创建时间
 	ArticleID       field.Uint64 // 文章ID
-	PriceType       field.Int64  // 付费类型
+	PriceType       field.Field  // 付费类型
 	Token           field.String // 付费密码
 	Price           field.Uint64 // 付费价格
 	Discount        field.Uint64 // 付费折扣
@@ -74,7 +74,7 @@ func (a *articlePayment) updateTableName(table string) *articlePayment {
 	a.ID = field.NewUint64(table, "id")
 	a.CreatedAt = field.NewTime(table, "created_at")
 	a.ArticleID = field.NewUint64(table, "article_id")
-	a.PriceType = field.NewInt64(table, "price_type")
+	a.PriceType = field.NewField(table, "price_type")
 	a.Token = field.NewString(table, "token")
 	a.Price = field.NewUint64(table, "price")
 	a.Discount = field.NewUint64(table, "discount")

@@ -73,7 +73,7 @@ type ArticleItem struct {
 	Dig           *ArticleDigItem           `json:"dig,omitempty"`            // 点赞
 	Content       *ArticleContentItem       `json:"content,omitempty"`        // 内容
 	ForwardSource *ArticleForwardSourceItem `json:"forward_source,omitempty"` // 转发源
-	Payments      []*ArticlePaymentItem     `json:"payment,omitempty"`        // 支付
+	Payments      []*ArticlePaymentItem     `json:"payments,omitempty"`       // 支付
 	Tags          []string                  `json:"tags,omitempty"`           // Tag
 }
 
@@ -164,12 +164,12 @@ func (m *ArticleForwardSourceItem) Fill(item interface{}) error {
 }
 
 type ArticlePaymentItem struct {
-	PriceType       int64     `json:"price_type,omitempty"`        // 付费类型
-	Token           string    `json:"token,omitempty"`             // 付费密码
-	Price           uint64    `json:"price,omitempty"`             // 付费价格
-	Discount        uint64    `json:"discount,omitempty"`          // 付费折扣
-	DiscountStartAt time.Time `json:"discount_start_at,omitempty"` // 折扣开始时间
-	DiscountEndAt   time.Time `json:"discount_end_at,omitempty"`   // 折扣结束时间
+	PriceType       consts.ArticlePriceType `json:"price_type"`                  // 付费类型
+	Token           string                  `json:"token,omitempty"`             // 付费密码
+	Price           uint64                  `json:"price,omitempty"`             // 付费价格
+	Discount        uint64                  `json:"discount,omitempty"`          // 付费折扣
+	DiscountStartAt time.Time               `json:"discount_start_at,omitempty"` // 折扣开始时间
+	DiscountEndAt   time.Time               `json:"discount_end_at,omitempty"`   // 折扣结束时间
 }
 
 func ArticlePaymentItemFillWith(item interface{}) *ArticlePaymentItem {
