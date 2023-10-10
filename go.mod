@@ -10,6 +10,7 @@ require (
 	github.com/atom-providers/log v0.0.0-20230805054420-343ad809890e
 	github.com/atom-providers/service-http v0.0.0-20230811021646-9685461114d2
 	github.com/atom-providers/uuid v0.0.0-20230801062951-5331ee1b8af6
+	github.com/brianvoe/gofakeit/v6 v6.23.0
 	github.com/go-gormigrate/gormigrate/v2 v2.1.1
 	github.com/gofiber/fiber/v2 v2.49.2
 	github.com/jinzhu/copier v0.4.0
@@ -26,7 +27,6 @@ require (
 	github.com/atom-providers/app v0.0.0-20230811021217-98a085634a0a // indirect
 	github.com/atom-providers/config v0.0.0-20230801062037-db91396e3287 // indirect
 	github.com/atom-providers/http-fiber v0.0.0-20230801062902-dd7466ac87eb // indirect
-	github.com/brianvoe/gofakeit/v6 v6.23.0 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
@@ -49,7 +49,6 @@ require (
 	github.com/pelletier/go-toml/v2 v2.0.9 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rivo/uniseg v0.4.4 // indirect
-	github.com/rogeecn/genx v0.0.0-20230922020207-ebf259573263 // indirect
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.1 // indirect
